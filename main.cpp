@@ -27,16 +27,42 @@ int main(int argc, char** args) {
 	}
 
 	// Initialize OpenGL context
-	SDL_GLContext context = SDL_GL_CreateContext(window);
+	SDL_GLContext gl_context = SDL_GL_CreateContext(window);
 
 	// Initialize GLEW
 	glewExperimental = GL_TRUE;
-	GLenum glewError = glewInit();
-	if (glewError != GLEW_OK)
+	GLenum glew_error = glewInit();
+	if (glew_error != GLEW_OK)
 	{
-		SDL_Log("Failed to initialize GLEW: %s", glewGetErrorString(glewError));
+		SDL_Log("Failed to initialize GLEW: %s", glewGetErrorString(glew_error));
 		return false;
 	}
+
+	// Run game loop
+	bool is_running = true;
+	Uint32 tick_count = 0;
+	while (is_running) {
+		SDL_Event event;
+
+		while (SDL_PollEvent(&event) != 0) {
+			switch (event.type) {
+			case SDL_QUIT:
+				is_running = false;
+				break;
+			}
+		}
+
+		float delta_time_seconds = (SDL_GetTicks() - tick_count) / 1000.0f;
+		if (delta_time_seconds > 0.05f) {
+			delta_time_seconds = 0.05f;
+		}
+
+		tick_count = SDL_GetTicks();
+	}
+
+	// Shutdown SDL
+	SDL_DestroyWindow(window);
+	SDL_Quit();
 
 	return 0;
 }
