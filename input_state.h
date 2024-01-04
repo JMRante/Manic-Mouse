@@ -7,8 +7,8 @@ struct InputState
 {
 	int mouse_x;
 	int mouse_y;
-	bool mouse_left_pressed;
-	bool window_closed;
+	bool mouse_left_pressed = false;
+	bool window_closed = false;
 };
 
 #endif

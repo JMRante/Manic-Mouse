@@ -15,16 +15,17 @@ public:
 	void Run();
 	void Close();
 private:
-	void UpdateInputState(InputState& inputState);
-	void UpdateGameState(GameState& gameState, const InputState& inputState);
-	void RenderGameState(const GameState& gameState);
-
 	SDL_Window* window;
 	SDL_GLContext gl_context;
 
 	InputState input_state;
 	GameState game_state;
 	Renderer renderer;
+
+	Assets assets;
+
+	void UpdateInputState(InputState& inputState);
+	void UpdateGameState(GameState& gameState, const InputState& inputState);
 };
 
 #endif

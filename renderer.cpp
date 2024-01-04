@@ -1,11 +1,8 @@
 #include "renderer.h"
 
-#include <GL/glew.h>
+#include "assets.h"
+#include "game_state.h"
 
-void Renderer::Close() {
-	glDeleteProgram(sprite_shader_program.shader_program_id);
-	glDeleteShader(sprite_shader_program.vertex_shader_id);
-	glDeleteShader(sprite_shader_program.fragment_shader_id);
+void Renderer::Render(const GameState& game_state, const Assets& assets) {
+	
 }
-
-#include <GL/glew.h>

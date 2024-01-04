@@ -3,7 +3,7 @@
 #include <SDL.h>
 #include <GL/glew.h>
 
-#include "data_loader.h"
+#include "assets.h"
 #include "game_state.h"
 #include "input_state.h"
 #include "renderer.h"
@@ -50,7 +50,7 @@ bool Game::Start() {
 	//GameState game_state;
 
 	// Load assets
-	renderer.sprite_shader_program = DataLoader::LoadShader("Assets/Shaders/sprite_shader.vert", "Assets/Shaders/sprite_shader.frag");
+	assets.Load();
 
 	return true;
 }
@@ -69,7 +69,6 @@ void Game::Run() {
 
 		tick_count = SDL_GetTicks();
 
-
 		UpdateInputState(input_state);
 
 		// If exit is initiated, close ASAP
@@ -80,13 +79,13 @@ void Game::Run() {
 
 		UpdateGameState(game_state, input_state);
 
-		RenderGameState(game_state);
+		renderer.Render(game_state, assets);
 	}
 }
 
 void Game::Close() {
 	// Shutdown
-	renderer.Close();
+	assets.Unload();
 
 	SDL_GL_DeleteContext(gl_context);
 	SDL_DestroyWindow(window);
@@ -108,10 +107,5 @@ void Game::UpdateInputState(InputState& inputState) {
 
 // Pass input state into system to transform game state
 void Game::UpdateGameState(GameState& gameState, const InputState& inputState) {
-
-}
-
-// Render game state
-void Game::RenderGameState(const GameState& gameState) {
 
 }
