@@ -24,33 +24,31 @@ void Assets::Unload() {
 }
 
 void Assets::LoadQuadMesh() {
-	float* vertices = new float[] {
-		0.5f, 0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		-0.5f, -0.5f, 0.0f,
-		-0.5f, 0.5f, 0.0f
+	float vertices[] = {
+		0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
+		0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+		-0.5f, 0.5f, 0.0f, 0.0f, 1.0f
 	};
 
-	unsigned int* indices = new unsigned int[] {
+	unsigned int indices[] = {
 		0, 1, 3,
 		1, 2, 3
 	};
 
 	glGenVertexArrays(1, &quad_mesh.vao_id);
-	glGenBuffers(1, &quad_mesh.vbo_id);
-	glGenBuffers(1, &quad_mesh.ebo_id);
-
 	glBindVertexArray(quad_mesh.vao_id);
 
+	glGenBuffers(1, &quad_mesh.vbo_id);
 	glBindBuffer(GL_ARRAY_BUFFER, quad_mesh.vbo_id);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+	glGenBuffers(1, &quad_mesh.ebo_id);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quad_mesh.ebo_id);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-
-	delete[] vertices;
-	delete[] indices;
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), reinterpret_cast<void*>(0));
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), reinterpret_cast<void*>(sizeof(float) * 3));
 }

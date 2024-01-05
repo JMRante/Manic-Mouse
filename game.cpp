@@ -14,29 +14,7 @@ bool Game::Start() {
 		return false;
 	}
 
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
-
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
-	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-
-	window = SDL_CreateWindow("Manic Mouse", 100, 100, 1280, 720, SDL_WINDOW_OPENGL);
-	if (!window)
-	{
-		SDL_Log("Failed to create window: %s", SDL_GetError());
-		return false;
-	}
-
-	gl_context = SDL_GL_CreateContext(window);
-
-	glewExperimental = GL_TRUE;
-	GLenum glew_error = glewInit();
-	if (glew_error != GLEW_OK)
-	{
-		SDL_Log("Failed to initialize GLEW: %s", glewGetErrorString(glew_error));
+	if (!renderer.Load()) {
 		return false;
 	}
 
@@ -76,9 +54,8 @@ void Game::Run() {
 
 void Game::Close() {
 	assets.Unload();
+	renderer.Unload();
 
-	SDL_GL_DeleteContext(gl_context);
-	SDL_DestroyWindow(window);
 	SDL_Quit();
 }
 

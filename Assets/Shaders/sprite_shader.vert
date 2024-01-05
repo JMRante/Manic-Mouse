@@ -12,7 +12,7 @@ void main()
 {
 	vec4 position = vec4(in_position, 1.0);
 
-	gl_Position = position * transform * projection;
+	gl_Position = position;
 
 	frag_uv = in_uv;
 }

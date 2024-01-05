@@ -15,9 +15,6 @@ public:
 	void Run();
 	void Close();
 private:
-	SDL_Window* window;
-	SDL_GLContext gl_context;
-
 	InputState input_state;
 	GameState game_state;
 	Renderer renderer;
