@@ -2,7 +2,6 @@
 #ifndef MANICMOUSE_INPUT_STATE_H_
 #define MANICMOUSE_INPUT_STATE_H_
 
-// Input State (memory allocated during initialization then released on quit)
 struct InputState
 {
 	int mouse_x;

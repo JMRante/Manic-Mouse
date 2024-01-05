@@ -9,7 +9,6 @@
 
 #include "renderer.h"
 
-// Text Files as Strings
 std::string DataLoader::LoadText(const std::string& text_file_path) {
 	std::ifstream file_input_stream;
 	file_input_stream.open(text_file_path);
@@ -23,7 +22,6 @@ std::string DataLoader::LoadText(const std::string& text_file_path) {
 	return "";
 }
 
-// Shaders for Vertices and Fragments Linked into Program Loaded onto GPU
 ShaderProgram DataLoader::LoadShader(const std::string& vertex_shader_file_path, const std::string& fragment_shader_file_path) {
 	ShaderProgram new_shader;
 
@@ -84,7 +82,6 @@ ShaderProgram DataLoader::LoadShader(const std::string& vertex_shader_file_path,
 	return new_shader;
 }
 
-// PNG Files Loaded onto GPU
 Texture DataLoader::LoadPNG(const std::string& png_file_path) {
 	SDL_Surface* png_surface = IMG_Load(png_file_path.c_str());
 
@@ -101,12 +98,10 @@ Texture DataLoader::LoadPNG(const std::string& png_file_path) {
 	return new_sprite;
 }
 
-// Config Files
 void DataLoader::LoadConfig(const std::string& config_file_path) {
 
 }
 
-// Level Files
 void DataLoader::LoadLevel(const std::string& level_file_path) {
 
 }

@@ -16,14 +16,23 @@ struct Texture {
 	GLuint id;
 };
 
+struct Mesh {
+	GLuint vao_id;
+	GLuint vbo_id;
+	GLuint ebo_id;
+};
+
 class Assets
 {
 public:
 	ShaderProgram sprite_shader_program;
 	Texture sprite_sheet;
+	Mesh quad_mesh;
 
 	void Load();
 	void Unload();
+private:
+	void LoadQuadMesh();
 };
 
 #endif
