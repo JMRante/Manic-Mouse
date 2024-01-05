@@ -14,6 +14,8 @@ public:
 	static Texture LoadPNG(const std::string& png_file_path);
 	static void LoadConfig(const std::string& config_file_path);
 	static void LoadLevel(const std::string& level_file_path);
+private:
+	static void FlipSurface(SDL_Surface* surface);
 };
 
 #endif

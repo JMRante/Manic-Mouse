@@ -84,14 +84,18 @@ ShaderProgram DataLoader::LoadShader(const std::string& vertex_shader_file_path,
 
 Texture DataLoader::LoadPNG(const std::string& png_file_path) {
 	SDL_Surface* png_surface = IMG_Load(png_file_path.c_str());
+	FlipSurface(png_surface);
 
 	Texture new_sprite;
 	new_sprite.width = png_surface->w;
 	new_sprite.height = png_surface->h;
-	
+
 	glGenTextures(1, &new_sprite.id);
 	glBindTexture(GL_TEXTURE_2D, new_sprite.id);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, png_surface->w, png_surface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, png_surface->pixels);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	SDL_FreeSurface(png_surface);
 
@@ -104,4 +108,27 @@ void DataLoader::LoadConfig(const std::string& config_file_path) {
 
 void DataLoader::LoadLevel(const std::string& level_file_path) {
 
+}
+
+// From: https://stackoverflow.com/questions/65815332/flipping-a-surface-vertically-in-sdl2
+void DataLoader::FlipSurface(SDL_Surface* surface)
+{
+	SDL_LockSurface(surface);
+
+	int pitch = surface->pitch;
+	char* temp = new char[pitch];
+	char* pixels = (char*)surface->pixels;
+
+	for (int i = 0; i < surface->h / 2; ++i) {
+		char* row1 = pixels + i * pitch;
+		char* row2 = pixels + (surface->h - i - 1) * pitch;
+
+		memcpy(temp, row1, pitch);
+		memcpy(row1, row2, pitch);
+		memcpy(row2, temp, pitch);
+	}
+
+	delete[] temp;
+
+	SDL_UnlockSurface(surface);
 }
