@@ -71,14 +71,16 @@ void Game::UpdateInputState(InputState& input_state) {
 			input_state.window_closed = true;
 			break;
 		case SDL_MOUSEMOTION:
-			input_state.mouse_x = event.motion.x;
-			input_state.mouse_y = event.motion.y;
+			input_state.mouse_position.x = (float)event.motion.x;
+			input_state.mouse_position.y = (float)event.motion.y;
 			break;
 		}
 	}
 }
 
 void Game::UpdateGameState(GameState& game_state, InputState& input_state) {
-	//game_state.level.mouse.transform.SetX(((float)(input_state.mouse_x) / (float)renderer.window_width));
-	//game_state.level.mouse.transform.SetY(((float)(input_state.mouse_y) / (float)renderer.window_height));
+	game_state.level.mouse.transform.SetPosition({ 
+		input_state.mouse_position.x - ((float)renderer.window_width / 2.0f),
+		(renderer.window_height - input_state.mouse_position.y) - ((float)renderer.window_height / 2.0f)
+	});
 }

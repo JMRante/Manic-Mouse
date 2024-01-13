@@ -27,6 +27,8 @@ bool Renderer::Load() {
 		return false;
 	}
 
+	SDL_ShowCursor(SDL_FALSE);
+
 	gl_context = SDL_GL_CreateContext(window);
 
 	glewExperimental = GL_TRUE;
@@ -37,7 +39,11 @@ bool Renderer::Load() {
 		return false;
 	}
 
-	view_matrix = Matrix4({ 0, 0 }, 0, { 2.0f / (float)window_width, 2.0f / (float)window_height });
+	view_matrix = Matrix4(
+		{ 0.0f, 0.0f }, 
+		0, 
+		{ 2.0f / (float)window_width, 2.0f / (float)window_height }
+	);
 
 	return true;
 }
