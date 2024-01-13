@@ -2,52 +2,73 @@
 #ifndef MANICMOUSE_GAME_STATE_H_
 #define MANICMOUSE_GAME_STATE_H_
 
+#include "game_math.h"
+
 enum MetaMode {
 	Main_Menu,
 	Gameplay
 };
 
-class Transform {
-public:
+enum KeyColor {
+	Red,
+	Yellow,
+	Blue
+};
+
+struct Transform {
 	Transform();
 
-	float GetX();
-	float GetY();
-	float GetScaleX();
-	float GetScaleY();
+	Vector2 GetPosition();
+	Vector2 GetScale();
 	float GetRotationInRadians();
-	float* GetTransformMatrix();
+	Matrix4 GetTransformMatrix();
 
-	void SetX(float x);
-	void SetY(float y);
-	void SetScaleX(float scale_x);
-	void SetScaleY(float scale_y);
+	void SetPosition(Vector2 position);
+	void SetScale(Vector2 scale);
 	void SetRotationInRadians(float rotation);
 private:
-	float x;
-	float y;
-	float scale_x;
-	float scale_y;
+	Vector2 position;
+	Vector2 scale;
 	float rotation_radians;
-	float transform_matrix[16];
+	Matrix4 transform_matrix;
 };
 
 struct Sprite {
-	int width;
-	int height;
-	int offset_x;
-	int offset_y;
+	Vector2 size;
+	Vector2 offset;
 };
 
 struct Mouse {
+	Vector2 direction_history[10];
 	Transform transform;
 	Sprite sprite;
 };
 
-struct GameState {
-	MetaMode mode;
-	int level_id;
-	Mouse mouse;
+struct Cheese {
+	Transform transform;
+	Sprite sprite;
+};
+
+struct Key {
+	KeyColor color;
+	Transform transform;
+	Sprite sprite;
+};
+
+struct Door {
+	KeyColor color;
+	Transform transform;
+	Sprite sprite;
+};
+
+struct Shooter {
+	Transform transform;
+	Sprite sprite;
+};
+
+struct Bullet {
+	Transform transform;
+	Sprite sprite;
 };
 
 // Player
@@ -58,7 +79,14 @@ struct GameState {
 // 120 bullet pool
 // Tilemap
 struct LevelState {
+	Mouse mouse;
+	Cheese cheese;
+};
 
+struct GameState {
+	MetaMode mode;
+	int level_id;
+	LevelState level;
 };
 
 #endif

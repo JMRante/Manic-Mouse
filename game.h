@@ -21,8 +21,8 @@ private:
 
 	Assets assets;
 
-	void UpdateInputState(InputState& inputState);
-	void UpdateGameState(GameState& gameState, InputState& inputState);
+	void UpdateInputState(InputState& input_state);
+	void UpdateGameState(GameState& game_state, InputState& input_state);
 };
 
 #endif

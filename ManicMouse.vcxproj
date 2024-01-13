@@ -138,6 +138,7 @@
     <ClCompile Include="assets.cpp" />
     <ClCompile Include="data_loader.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="game_math.cpp" />
     <ClCompile Include="game_state.cpp" />
     <ClCompile Include="input_state.cpp" />
     <ClCompile Include="main.cpp" />
@@ -147,6 +148,7 @@
     <ClInclude Include="assets.h" />
     <ClInclude Include="data_loader.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="game_math.h" />
     <ClInclude Include="game_state.h" />
     <ClInclude Include="input_state.h" />
     <ClInclude Include="renderer.h" />

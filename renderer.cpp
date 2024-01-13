@@ -37,6 +37,8 @@ bool Renderer::Load() {
 		return false;
 	}
 
+	view_matrix = Matrix4({ 0, 0 }, 0, { 2.0f / (float)window_width, 2.0f / (float)window_height });
+
 	return true;
 }
 
@@ -56,11 +58,12 @@ void Renderer::Render(GameState& game_state, Assets& assets) {
 	glBindTexture(GL_TEXTURE_2D, assets.sprite_sheet.id);
 	glBindVertexArray(assets.quad_mesh.vao_id);
 
-	Sprite sprite = game_state.mouse.sprite;
+	Sprite sprite = game_state.level.mouse.sprite;
 	GLint sprite_size_and_offset_uniform_id = glGetUniformLocation(assets.sprite_shader_program.id, "sprite_size_and_offset");
-	glUniform4f(sprite_size_and_offset_uniform_id, (float)sprite.width, (float)sprite.height, (float)sprite.offset_x, (float)sprite.offset_y);
-	GLint transform_uniform_id = glGetUniformLocation(assets.sprite_shader_program.id, "transform");
-	glUniformMatrix4fv(transform_uniform_id, 1, GL_TRUE, game_state.mouse.transform.GetTransformMatrix());
+	glUniform4f(sprite_size_and_offset_uniform_id, sprite.size.x, sprite.size.y, sprite.offset.x, sprite.offset.y);
+	GLint transform_view_uniform_id = glGetUniformLocation(assets.sprite_shader_program.id, "transform_view");
+	Matrix4 transform_view = Matrix4::Multiply(game_state.level.mouse.transform.GetTransformMatrix(), view_matrix);
+	glUniformMatrix4fv(transform_view_uniform_id, 1, GL_TRUE, transform_view.data);
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

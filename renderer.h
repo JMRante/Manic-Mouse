@@ -16,6 +16,8 @@ public:
 	int window_width;
 	int window_height;
 
+	Matrix4 view_matrix;
+
 	bool Load();
 	void Unload();
 

@@ -18,17 +18,12 @@ bool Game::Start() {
 		return false;
 	}
 
-	// Setup universal data
-	//InputState input_state;
 	game_state.mode = Gameplay;
 	game_state.level_id = 0;
-	game_state.mouse.sprite.width = 32;
-	game_state.mouse.sprite.height = 32;
-	game_state.mouse.sprite.offset_x = 0;
-	game_state.mouse.sprite.offset_y = 224;
-	game_state.mouse.transform = Transform();
-	game_state.mouse.transform.SetScaleX((float)game_state.mouse.sprite.width / (float)renderer.window_width);
-	game_state.mouse.transform.SetScaleY((float)game_state.mouse.sprite.height / (float)renderer.window_height);
+	game_state.level.mouse.sprite.size = { 32.0f, 32.0f };
+	game_state.level.mouse.sprite.offset = { 0.0f, 0.0f };
+	game_state.level.mouse.transform = Transform();
+	game_state.level.mouse.transform.SetScale({ 32.0f, 32.0f });
 
 	assets.Load();
 
@@ -67,18 +62,23 @@ void Game::Close() {
 	SDL_Quit();
 }
 
-void Game::UpdateInputState(InputState& inputState) {
+void Game::UpdateInputState(InputState& input_state) {
 	SDL_Event event;
 
 	while (SDL_PollEvent(&event) != 0) {
 		switch (event.type) {
 		case SDL_QUIT:
-			inputState.window_closed = true;
+			input_state.window_closed = true;
+			break;
+		case SDL_MOUSEMOTION:
+			input_state.mouse_x = event.motion.x;
+			input_state.mouse_y = event.motion.y;
 			break;
 		}
 	}
 }
 
-void Game::UpdateGameState(GameState& gameState, InputState& inputState) {
-
+void Game::UpdateGameState(GameState& game_state, InputState& input_state) {
+	//game_state.level.mouse.transform.SetX(((float)(input_state.mouse_x) / (float)renderer.window_width));
+	//game_state.level.mouse.transform.SetY(((float)(input_state.mouse_y) / (float)renderer.window_height));
 }
