@@ -19,7 +19,7 @@ public:
 	bool Load();
 	void Unload();
 
-	void Render(const GameState& game_state, const Assets& assets);
+	void Render(GameState& game_state, Assets& assets);
 };
 
 #endif

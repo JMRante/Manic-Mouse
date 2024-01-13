@@ -22,13 +22,13 @@ bool Game::Start() {
 	//InputState input_state;
 	game_state.mode = Gameplay;
 	game_state.level_id = 0;
-	game_state.test_sprite.width = 32;
-	game_state.test_sprite.height = 32;
-	game_state.test_sprite.offset_x = 0;
-	game_state.test_sprite.offset_y = 224;
-	game_state.test_sprite.rotation_degrees = 0.0f;
-	game_state.test_sprite.x = 0.0f;
-	game_state.test_sprite.y = 0.0f;
+	game_state.mouse.sprite.width = 32;
+	game_state.mouse.sprite.height = 32;
+	game_state.mouse.sprite.offset_x = 0;
+	game_state.mouse.sprite.offset_y = 224;
+	game_state.mouse.transform = Transform();
+	game_state.mouse.transform.SetScaleX((float)game_state.mouse.sprite.width / (float)renderer.window_width);
+	game_state.mouse.transform.SetScaleY((float)game_state.mouse.sprite.height / (float)renderer.window_height);
 
 	assets.Load();
 
@@ -79,6 +79,6 @@ void Game::UpdateInputState(InputState& inputState) {
 	}
 }
 
-void Game::UpdateGameState(GameState& gameState, const InputState& inputState) {
+void Game::UpdateGameState(GameState& gameState, InputState& inputState) {
 
 }

@@ -22,7 +22,7 @@ private:
 	Assets assets;
 
 	void UpdateInputState(InputState& inputState);
-	void UpdateGameState(GameState& gameState, const InputState& inputState);
+	void UpdateGameState(GameState& gameState, InputState& inputState);
 };
 
 #endif
