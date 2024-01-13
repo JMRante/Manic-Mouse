@@ -26,6 +26,9 @@ bool Game::Start() {
 	game_state.test_sprite.height = 32;
 	game_state.test_sprite.offset_x = 0;
 	game_state.test_sprite.offset_y = 224;
+	game_state.test_sprite.rotation_degrees = 0.0f;
+	game_state.test_sprite.x = 0.0f;
+	game_state.test_sprite.y = 0.0f;
 
 	assets.Load();
 

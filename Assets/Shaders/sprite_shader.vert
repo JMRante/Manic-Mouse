@@ -13,7 +13,7 @@ void main()
 {
 	vec4 position = vec4(in_position, 1.0);
 
-	gl_Position = position;
+	gl_Position = position * transform;
 
 	vec2 normalized_sprite_size = vec2(sprite_size_and_offset.x / sprite_sheet_size.x, sprite_size_and_offset.y / sprite_sheet_size.y);
 	vec2 normalized_sprite_offset = vec2(sprite_size_and_offset.z / sprite_sheet_size.x, sprite_size_and_offset.w / sprite_sheet_size.y);

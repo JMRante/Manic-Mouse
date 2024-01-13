@@ -13,6 +13,9 @@ public:
 	SDL_Window* window;
 	SDL_GLContext gl_context;
 
+	int window_width;
+	int window_height;
+
 	bool Load();
 	void Unload();
 

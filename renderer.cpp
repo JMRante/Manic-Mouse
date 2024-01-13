@@ -1,5 +1,6 @@
 #include "renderer.h"
 
+#include <cmath>
 #include <SDL.h>
 #include <GL/glew.h>
 
@@ -16,7 +17,10 @@ bool Renderer::Load() {
 
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
-	window = SDL_CreateWindow("Manic Mouse", 100, 100, 1280, 720, SDL_WINDOW_OPENGL);
+	window_width = 1280;
+	window_height = 720;
+
+	window = SDL_CreateWindow("Manic Mouse", 100, 100, window_width, window_height, SDL_WINDOW_OPENGL);
 	if (!window)
 	{
 		SDL_Log("Failed to create window: %s", SDL_GetError());
@@ -57,6 +61,16 @@ void Renderer::Render(const GameState& game_state, const Assets& assets) {
 	glUniform4f(sprite_size_and_offset_uniform_id, sprite.width, sprite.height, sprite.offset_x, sprite.offset_y);
 	GLint sprite_sheet_size_uniform_id = glGetUniformLocation(assets.sprite_shader_program.id, "sprite_sheet_size");
 	glUniform2f(sprite_sheet_size_uniform_id, assets.sprite_sheet.width, assets.sprite_sheet.height);
+	float deg_to_rad = 0.01745329f;
+	float rotation_radians = sprite.rotation_degrees * deg_to_rad;
+	float transform[] = {
+		cos(rotation_radians) * (sprite.width / (float)window_width), -sin(rotation_radians), 0.0f, 0.0f,
+		sin(rotation_radians), cos(rotation_radians) * (sprite.height / (float)window_height), 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		sprite.x, sprite.y, 0.0f, 1.0f,
+	};
+	GLint transform_uniform_id = glGetUniformLocation(assets.sprite_shader_program.id, "transform");
+	glUniformMatrix4fv(transform_uniform_id, 1, GL_TRUE, reinterpret_cast<const float*>(&transform[0]));
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

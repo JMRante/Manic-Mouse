@@ -12,6 +12,9 @@ struct Sprite {
 	int height;
 	int offset_x;
 	int offset_y;
+	float rotation_degrees;
+	float x;
+	float y;
 };
 
 struct GameState {
