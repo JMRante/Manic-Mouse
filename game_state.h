@@ -7,9 +7,17 @@ enum MetaMode {
 	Gameplay
 };
 
+struct Sprite {
+	int width;
+	int height;
+	int offset_x;
+	int offset_y;
+};
+
 struct GameState {
 	MetaMode mode;
 	int level_id;
+	Sprite test_sprite;
 };
 
 // Player

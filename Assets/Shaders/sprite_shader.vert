@@ -1,7 +1,8 @@
 #version 460
 
 uniform mat4 transform;
-uniform mat4 projection;
+uniform vec4 sprite_size_and_offset;
+uniform vec2 sprite_sheet_size;
 
 layout(location = 0) in vec3 in_position;
 layout(location = 1) in vec2 in_uv;
@@ -14,5 +15,8 @@ void main()
 
 	gl_Position = position;
 
-	frag_uv = in_uv;
+	vec2 normalized_sprite_size = vec2(sprite_size_and_offset.x / sprite_sheet_size.x, sprite_size_and_offset.y / sprite_sheet_size.y);
+	vec2 normalized_sprite_offset = vec2(sprite_size_and_offset.z / sprite_sheet_size.x, sprite_size_and_offset.w / sprite_sheet_size.y);
+
+	frag_uv = (in_uv * normalized_sprite_size) + normalized_sprite_offset;
 }

@@ -52,6 +52,12 @@ void Renderer::Render(const GameState& game_state, const Assets& assets) {
 	glBindTexture(GL_TEXTURE_2D, assets.sprite_sheet.id);
 	glBindVertexArray(assets.quad_mesh.vao_id);
 
+	Sprite sprite = game_state.test_sprite;
+	GLint sprite_size_and_offset_uniform_id = glGetUniformLocation(assets.sprite_shader_program.id, "sprite_size_and_offset");
+	glUniform4f(sprite_size_and_offset_uniform_id, sprite.width, sprite.height, sprite.offset_x, sprite.offset_y);
+	GLint sprite_sheet_size_uniform_id = glGetUniformLocation(assets.sprite_shader_program.id, "sprite_sheet_size");
+	glUniform2f(sprite_sheet_size_uniform_id, assets.sprite_sheet.width, assets.sprite_sheet.height);
+
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	SDL_GL_SwapWindow(window);

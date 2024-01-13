@@ -20,7 +20,12 @@ bool Game::Start() {
 
 	// Setup universal data
 	//InputState input_state;
-	//GameState game_state;
+	game_state.mode = Gameplay;
+	game_state.level_id = 0;
+	game_state.test_sprite.width = 32;
+	game_state.test_sprite.height = 32;
+	game_state.test_sprite.offset_x = 0;
+	game_state.test_sprite.offset_y = 224;
 
 	assets.Load();
 
