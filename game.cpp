@@ -20,10 +20,18 @@ bool Game::Start() {
 
 	game_state.mode = Gameplay;
 	game_state.level_id = 0;
-	game_state.level.mouse.sprite.size = { 32.0f, 32.0f };
-	game_state.level.mouse.sprite.offset = { 0.0f, 0.0f };
-	game_state.level.mouse.transform = Transform();
-	game_state.level.mouse.transform.SetScale({ 32.0f, 32.0f });
+
+	Mouse& mouse = game_state.level.mouse;
+	mouse.sprites[0].size = {32.0f, 32.0f};
+	mouse.sprites[0].offset = { 0.0f, 0.0f };
+	mouse.sprites[1].size = { 32.0f, 32.0f };
+	mouse.sprites[1].offset = { 32.0f, 0.0f };
+	mouse.sprites[2].size = { 32.0f, 32.0f };
+	mouse.sprites[2].offset = { 64.0f, 0.0f };
+	mouse.sprite_index = 0;
+	mouse.sprite_speed = 0.15;
+	mouse.transform = Transform();
+	mouse.transform.SetScale({ 32.0f, 32.0f });
 
 	assets.Load();
 
@@ -49,7 +57,7 @@ void Game::Run() {
 			break;
 		}
 
-		UpdateGameState(game_state, input_state);
+		UpdateGameState(game_state, input_state, delta_time_seconds);
 
 		renderer.Render(game_state, assets);
 	}
@@ -65,22 +73,38 @@ void Game::Close() {
 void Game::UpdateInputState(InputState& input_state) {
 	SDL_Event event;
 
+	input_state.mouse_speed = 0.0f;
+
 	while (SDL_PollEvent(&event) != 0) {
 		switch (event.type) {
 		case SDL_QUIT:
 			input_state.window_closed = true;
 			break;
 		case SDL_MOUSEMOTION:
-			input_state.mouse_position.x = (float)event.motion.x;
-			input_state.mouse_position.y = (float)event.motion.y;
+			Vector2 next_mouse_position = { (float)event.motion.x, (float)event.motion.y };
+			input_state.mouse_speed = (next_mouse_position - input_state.mouse_position).Length();
+			input_state.mouse_position = next_mouse_position;
 			break;
 		}
 	}
 }
 
-void Game::UpdateGameState(GameState& game_state, InputState& input_state) {
-	game_state.level.mouse.transform.SetPosition({ 
+void Game::UpdateGameState(GameState& game_state, InputState& input_state, float delta_time_seconds) {
+	Mouse& mouse = game_state.level.mouse;
+
+	mouse.transform.SetPosition({
 		input_state.mouse_position.x,
-		(renderer.window_height - input_state.mouse_position.y)
+		renderer.window_height - input_state.mouse_position.y
 	});
+
+	mouse.sprite_timer += input_state.mouse_speed * delta_time_seconds;
+	
+	if (mouse.sprite_timer >= mouse.sprite_speed) {
+		mouse.sprite_timer -= mouse.sprite_speed;
+		mouse.sprite_index++;
+
+		if (mouse.sprite_index >= 3) {
+			mouse.sprite_index = 0;
+		}
+	}
 }

@@ -6,6 +6,17 @@ struct Vector2
 {
 	float x;
 	float y;
+
+	friend Vector2 operator+(const Vector2& vector_left, const Vector2& vector_right);
+	friend Vector2 operator-(const Vector2& vector_left, const Vector2& vector_right);
+	friend Vector2 operator*(const Vector2& vector_left, const Vector2& vector_right);
+	friend Vector2 operator*(const Vector2& vector, float scalar);
+	friend Vector2 operator*(float scalar, const Vector2& vector);
+	Vector2& operator*=(float scalar);
+	Vector2& operator+=(const Vector2& vector_right);
+	Vector2& operator-=(const Vector2& vector_right);
+
+	float Length();
 };
 
 struct Matrix4

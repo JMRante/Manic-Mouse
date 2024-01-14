@@ -41,7 +41,10 @@ struct Sprite {
 struct Mouse {
 	Vector2 direction_history[10];
 	Transform transform;
-	Sprite sprite;
+	Sprite sprites[4];
+	int sprite_index;
+	float sprite_timer;
+	float sprite_speed;
 };
 
 struct Cheese {

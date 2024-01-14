@@ -2,6 +2,57 @@
 
 #include <cmath>
 
+Vector2 operator+(const Vector2& vector_left, const Vector2& vector_right)
+{
+	return Vector2(vector_left.x + vector_right.x, vector_left.y + vector_right.y);
+}
+
+Vector2 operator-(const Vector2& vector_left, const Vector2& vector_right)
+{
+	return Vector2(vector_left.x - vector_right.x, vector_left.y - vector_right.y);
+}
+
+Vector2 operator*(const Vector2& vector_left, const Vector2& vector_right)
+{
+	return Vector2(vector_left.x * vector_right.x, vector_left.y * vector_right.y);
+}
+
+Vector2 operator*(const Vector2& vector, float scalar)
+{
+	return Vector2(vector.x * scalar, vector.y * scalar);
+}
+
+Vector2 operator*(float scalar, const Vector2& vector)
+{
+	return Vector2(vector.x * scalar, vector.y * scalar);
+}
+
+Vector2& Vector2::operator*=(float scalar)
+{
+	x *= scalar;
+	y *= scalar;
+	return *this;
+}
+
+Vector2& Vector2::operator+=(const Vector2& vector_right)
+{
+	x += vector_right.x;
+	y += vector_right.y;
+	return *this;
+}
+
+Vector2& Vector2::operator-=(const Vector2& vector_right)
+{
+	x -= vector_right.x;
+	y -= vector_right.y;
+	return *this;
+}
+
+float Vector2::Length()
+{
+	return sqrt(x * x + y * y);
+}
+
 Matrix4::Matrix4() {
 	data[0] = 1.0f;
 	data[1] = 0.0f;
