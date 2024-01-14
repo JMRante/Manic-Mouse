@@ -40,7 +40,7 @@ bool Renderer::Load() {
 	}
 
 	view_matrix = Matrix4(
-		{ 0.0f, 0.0f }, 
+		{ -1.0f, -1.0f }, 
 		0, 
 		{ 2.0f / (float)window_width, 2.0f / (float)window_height }
 	);

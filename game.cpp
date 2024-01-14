@@ -80,7 +80,7 @@ void Game::UpdateInputState(InputState& input_state) {
 
 void Game::UpdateGameState(GameState& game_state, InputState& input_state) {
 	game_state.level.mouse.transform.SetPosition({ 
-		input_state.mouse_position.x - ((float)renderer.window_width / 2.0f),
-		(renderer.window_height - input_state.mouse_position.y) - ((float)renderer.window_height / 2.0f)
+		input_state.mouse_position.x,
+		(renderer.window_height - input_state.mouse_position.y)
 	});
 }
