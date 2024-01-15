@@ -52,6 +52,15 @@ float Vector2D::Angle(const Vector2D& vector_left, const Vector2D& vector_right)
 	return acos(Vector2D::Dot(vector_left, vector_right) / (vector_left.Length() * vector_right.Length()));
 }
 
+Vector2D Vector2D::Normalized(const Vector2D& vector)
+{
+	Vector2D normalized_vector = vector;
+	float length = vector.Length();
+	normalized_vector.x /= length;
+	normalized_vector.y /= length;
+	return normalized_vector;
+}
+
 const Vector2D Vector2D::zero = { 0.0f, 0.0f };
 const Vector2D Vector2D::right = { 1.0f, 0.0f };
 const Vector2D Vector2D::up = { 0.0f, 1.0f };

@@ -19,6 +19,7 @@ struct Vector2D
 	float Length() const;
 	static float Dot(const Vector2D& vector_left, const Vector2D& vector_right);
 	static float Angle(const Vector2D& vector_left, const Vector2D& vector_right);
+	static Vector2D Normalized(const Vector2D& vector);
 
 	static const Vector2D zero;
 	static const Vector2D right;
