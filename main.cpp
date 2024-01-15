@@ -6,13 +6,6 @@
 
 #include "game.h"
 
-// main
-//   game
-//     input_state
-//     game_state
-//     renderer
-// data_loader
-
 int main(int argc, char** args) {
 	Game game;
 	

@@ -1,5 +1,6 @@
 #include "game.h"
 
+#include <cmath>
 #include <SDL.h>
 #include <GL/glew.h>
 
@@ -29,7 +30,7 @@ bool Game::Start() {
 	mouse.sprites[2].size = { 32.0f, 32.0f };
 	mouse.sprites[2].offset = { 64.0f, 0.0f };
 	mouse.sprite_index = 0;
-	mouse.sprite_speed = 0.15;
+	mouse.sprite_speed = 0.15f;
 	mouse.transform = Transform();
 	mouse.transform.SetScale({ 32.0f, 32.0f });
 
@@ -81,8 +82,12 @@ void Game::UpdateInputState(InputState& input_state) {
 			input_state.window_closed = true;
 			break;
 		case SDL_MOUSEMOTION:
-			Vector2 next_mouse_position = { (float)event.motion.x, (float)event.motion.y };
-			input_state.mouse_speed = (next_mouse_position - input_state.mouse_position).Length();
+			Vector2D next_mouse_position = { (float)event.motion.x, (float)event.motion.y };
+			Vector2D mouse_direction = next_mouse_position - input_state.mouse_position;
+			input_state.mouse_direction_smoothed = mouse_direction;
+			//SDL_Log("%f, %f", mouse_direction.x, mouse_direction.y);
+
+			input_state.mouse_speed = mouse_direction.Length();
 			input_state.mouse_position = next_mouse_position;
 			break;
 		}
@@ -107,4 +112,9 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 			mouse.sprite_index = 0;
 		}
 	}
+
+
+	float angle = Vector2D::Angle(Vector2D::up, input_state.mouse_direction_smoothed);
+	angle = copysign(angle, input_state.mouse_direction_smoothed.x);
+	mouse.transform.SetRotationInRadians(angle);
 }

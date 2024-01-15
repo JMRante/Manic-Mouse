@@ -2,58 +2,61 @@
 
 #include <cmath>
 
-Vector2 operator+(const Vector2& vector_left, const Vector2& vector_right)
-{
-	return Vector2(vector_left.x + vector_right.x, vector_left.y + vector_right.y);
+Vector2D operator+(const Vector2D& vector_left, const Vector2D& vector_right) {
+	return Vector2D(vector_left.x + vector_right.x, vector_left.y + vector_right.y);
 }
 
-Vector2 operator-(const Vector2& vector_left, const Vector2& vector_right)
-{
-	return Vector2(vector_left.x - vector_right.x, vector_left.y - vector_right.y);
+Vector2D operator-(const Vector2D& vector_left, const Vector2D& vector_right) {
+	return Vector2D(vector_left.x - vector_right.x, vector_left.y - vector_right.y);
 }
 
-Vector2 operator*(const Vector2& vector_left, const Vector2& vector_right)
-{
-	return Vector2(vector_left.x * vector_right.x, vector_left.y * vector_right.y);
+Vector2D operator*(const Vector2D& vector_left, const Vector2D& vector_right) {
+	return Vector2D(vector_left.x * vector_right.x, vector_left.y * vector_right.y);
 }
 
-Vector2 operator*(const Vector2& vector, float scalar)
-{
-	return Vector2(vector.x * scalar, vector.y * scalar);
+Vector2D operator*(const Vector2D& vector, float scalar) {
+	return Vector2D(vector.x * scalar, vector.y * scalar);
 }
 
-Vector2 operator*(float scalar, const Vector2& vector)
-{
-	return Vector2(vector.x * scalar, vector.y * scalar);
+Vector2D operator*(float scalar, const Vector2D& vector) {
+	return Vector2D(vector.x * scalar, vector.y * scalar);
 }
 
-Vector2& Vector2::operator*=(float scalar)
-{
+Vector2D& Vector2D::operator*=(float scalar) {
 	x *= scalar;
 	y *= scalar;
 	return *this;
 }
 
-Vector2& Vector2::operator+=(const Vector2& vector_right)
-{
+Vector2D& Vector2D::operator+=(const Vector2D& vector_right) {
 	x += vector_right.x;
 	y += vector_right.y;
 	return *this;
 }
 
-Vector2& Vector2::operator-=(const Vector2& vector_right)
-{
+Vector2D& Vector2D::operator-=(const Vector2D& vector_right) {
 	x -= vector_right.x;
 	y -= vector_right.y;
 	return *this;
 }
 
-float Vector2::Length()
-{
+float Vector2D::Length() const {
 	return sqrt(x * x + y * y);
 }
 
-Matrix4::Matrix4() {
+float Vector2D::Dot(const Vector2D& vector_left, const Vector2D& vector_right) {
+	return (vector_left.x * vector_right.x) + (vector_left.y * vector_right.y);
+}
+
+float Vector2D::Angle(const Vector2D& vector_left, const Vector2D& vector_right) {
+	return acos(Vector2D::Dot(vector_left, vector_right) / (vector_left.Length() * vector_right.Length()));
+}
+
+const Vector2D Vector2D::zero = { 0.0f, 0.0f };
+const Vector2D Vector2D::right = { 1.0f, 0.0f };
+const Vector2D Vector2D::up = { 0.0f, 1.0f };
+
+Matrix4D::Matrix4D() {
 	data[0] = 1.0f;
 	data[1] = 0.0f;
 	data[2] = 0.0f;
@@ -75,7 +78,7 @@ Matrix4::Matrix4() {
 	data[15] = 1.0f;
 }
 
-Matrix4::Matrix4(Vector2 translate, float rotate_radians_on_z, Vector2 scale) {
+Matrix4D::Matrix4D(Vector2D translate, float rotate_radians_on_z, Vector2D scale) {
 	data[0] = cos(rotate_radians_on_z) * scale.x;
 	data[1] = -sin(rotate_radians_on_z);
 	data[2] = 0.0f;
@@ -97,8 +100,8 @@ Matrix4::Matrix4(Vector2 translate, float rotate_radians_on_z, Vector2 scale) {
 	data[15] = 1.0f;
 }
 
-Matrix4 Matrix4::Multiply(const Matrix4& matrix_left, const Matrix4& matrix_right) {
-	Matrix4 result_matrix;
+Matrix4D operator*(const Matrix4D& matrix_left, const Matrix4D& matrix_right) {
+	Matrix4D result_matrix;
 
 	result_matrix.data[0] = matrix_left.data[0] * matrix_right.data[0] + matrix_left.data[1] * matrix_right.data[4] + matrix_left.data[2] * matrix_right.data[8] + matrix_left.data[3] * matrix_right.data[12];
 	result_matrix.data[1] = matrix_left.data[0] * matrix_right.data[1] + matrix_left.data[1] * matrix_right.data[5] + matrix_left.data[2] * matrix_right.data[9] + matrix_left.data[3] * matrix_right.data[13];

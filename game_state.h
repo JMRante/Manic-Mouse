@@ -18,28 +18,27 @@ enum KeyColor {
 struct Transform {
 	Transform();
 
-	Vector2 GetPosition();
-	Vector2 GetScale();
+	Vector2D GetPosition();
+	Vector2D GetScale();
 	float GetRotationInRadians();
-	Matrix4 GetTransformMatrix();
+	Matrix4D GetTransformMatrix();
 
-	void SetPosition(Vector2 position);
-	void SetScale(Vector2 scale);
-	void SetRotationInRadians(float rotation);
+	void SetPosition(Vector2D position);
+	void SetScale(Vector2D scale);
+	void SetRotationInRadians(float rotation_radians);
 private:
-	Vector2 position;
-	Vector2 scale;
+	Vector2D position;
+	Vector2D scale;
 	float rotation_radians;
-	Matrix4 transform_matrix;
+	Matrix4D transform_matrix;
 };
 
 struct Sprite {
-	Vector2 size;
-	Vector2 offset;
+	Vector2D size;
+	Vector2D offset;
 };
 
 struct Mouse {
-	Vector2 direction_history[10];
 	Transform transform;
 	Sprite sprites[4];
 	int sprite_index;
