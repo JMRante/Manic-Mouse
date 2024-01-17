@@ -8,6 +8,12 @@ void Assets::Load() {
 	sprite_shader_program = DataLoader::LoadShader("Assets/Shaders/sprite_shader.vert", "Assets/Shaders/sprite_shader.frag");
 	sprite_sheet = DataLoader::LoadPNG("Assets/mm_sprites.png");
 
+	tile_sheets[0] = DataLoader::LoadPNG("Assets/mm_tileset1.png");
+	tile_sheets[1] = DataLoader::LoadPNG("Assets/mm_tileset2.png");
+	tile_sheets[2] = DataLoader::LoadPNG("Assets/mm_tileset3.png");
+	tile_sheets[3] = DataLoader::LoadPNG("Assets/mm_tileset4.png");
+	tile_sheets[4] = DataLoader::LoadPNG("Assets/mm_tileset5.png");
+
 	LoadQuadMesh();
 }
 

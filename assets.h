@@ -27,6 +27,7 @@ class Assets
 public:
 	ShaderProgram sprite_shader_program;
 	Texture sprite_sheet;
+	Texture tile_sheets[5];
 	Mesh quad_mesh;
 
 	void Load();
