@@ -63,26 +63,23 @@ struct Door {
 	Sprite sprite;
 };
 
-struct Shooter {
-	Transform transform;
-	Sprite sprite;
-};
+struct Tilemap {
+	int tilesheet_index;
+	unsigned char tiles[920]; // 40 x 23
 
-struct Bullet {
-	Transform transform;
-	Sprite sprite;
+	unsigned char GetTileByCoordinate(const int x, const int y);
+	Vector2D TilemapIndexToTilesheetOffset(const int tilemap_index);
 };
 
 // Player
 // Cheese
 // 3 Keys
 // 3 Doors
-// 12 shooters
-// 120 bullet pool
 // Tilemap
 struct LevelState {
 	Mouse mouse;
 	Cheese cheese;
+	Tilemap tilemap;
 };
 
 struct GameState {
@@ -90,5 +87,7 @@ struct GameState {
 	int level_id;
 	LevelState level;
 };
+
+
 
 #endif
