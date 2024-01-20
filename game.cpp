@@ -89,7 +89,15 @@ void Game::UpdateInputState(InputState& input_state) {
 			input_state.mouse_direction_smoothed.y /= 10;
 
 			input_state.mouse_speed = mouse_direction.Length();
-			input_state.mouse_position = next_mouse_position;
+
+			if (has_sampled_mouse_position) {
+				input_state.last_mouse_position = input_state.mouse_position;
+				input_state.mouse_position = next_mouse_position;
+			} else {
+				input_state.last_mouse_position = next_mouse_position;
+				input_state.mouse_position = next_mouse_position;
+			}
+
 			has_sampled_mouse_position = true;
 			break;
 		}
