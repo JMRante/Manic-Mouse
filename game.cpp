@@ -101,7 +101,7 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 
 	mouse.transform.SetPosition({
 		input_state.mouse_position.x,
-		renderer.window_height - input_state.mouse_position.y
+		input_state.mouse_position.y
 	});
 
 	mouse.sprite_timer += input_state.mouse_speed * delta_time_seconds;
@@ -118,9 +118,6 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 	float angle = Vector2D::Angle(Vector2D::up * -1.0f, input_state.mouse_direction_smoothed);
 	angle = copysign(angle, input_state.mouse_direction_smoothed.x);
 	mouse.transform.SetRotationInRadians(angle);
-
-	Vector2D check_position = mouse.transform.GetPosition();
-	check_position.y = renderer.window_height - check_position.y;
 }
 
 void Game::LoadLevel(int level_id) {
@@ -191,7 +188,7 @@ void Game::LoadLevel(int level_id) {
 				int tilesheet_height = assets.tile_sheets[tilemap.tilesheet_index].height;
 
 				vertices[interval] = (x + j) * 32.0f;
-				vertices[interval + 1] = renderer.window_height - ((y + k) * 32.0f);
+				vertices[interval + 1] = (y + k) * -32.0f;
 				vertices[interval + 2] = 0.0f;
 				vertices[interval + 3] = (tilesheet_offset.x / tilesheet_width) + (j * (32.0f / tilesheet_width));
 				vertices[interval + 4] = (tilesheet_offset.y / tilesheet_height) + ((1.0f - k) * (32.0f / tilesheet_height));

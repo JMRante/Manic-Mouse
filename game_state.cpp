@@ -30,7 +30,7 @@ void Transform::SetPosition(Vector2D position) {
 	this->position = position;
 
 	transform_matrix.data[12] = position.x;
-	transform_matrix.data[13] = position.y;
+	transform_matrix.data[13] = -position.y;
 }
 
 void Transform::SetScale(Vector2D scale) {
