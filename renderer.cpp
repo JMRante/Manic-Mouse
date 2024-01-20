@@ -60,32 +60,75 @@ void Renderer::Render(GameState& game_state, Assets& assets) {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	LevelState& level = game_state.level;
+
 	// Tilemap
-	glUseProgram(assets.tilemap_shader_program.id);
-	glBindVertexArray(assets.level_mesh.vao_id);
-	glBindTexture(GL_TEXTURE_2D, assets.tile_sheets[game_state.level.tilemap.tilesheet_index].id);
+	if (level.tilemap.active) {
+		glUseProgram(assets.tilemap_shader_program.id);
+		glBindVertexArray(assets.level_mesh.vao_id);
+		glBindTexture(GL_TEXTURE_2D, assets.tile_sheets[level.tilemap.tilesheet_index].id);
 
-	GLint tilemap_transform_view_uniform_id = glGetUniformLocation(assets.tilemap_shader_program.id, "transform_view");
-	Transform tile_transform = Transform();
-	tile_transform.SetPosition({ 0.0f, 0.0f });
-	Matrix4D tilemap_transform_view = tile_transform.GetTransformMatrix() * view_matrix;
-	glUniformMatrix4fv(tilemap_transform_view_uniform_id, 1, GL_TRUE, tilemap_transform_view.data);
+		GLint tilemap_transform_view_uniform_id = glGetUniformLocation(assets.tilemap_shader_program.id, "transform_view");
+		Transform tile_transform = Transform();
+		tile_transform.SetPosition({ 0.0f, 0.0f });
+		Matrix4D tilemap_transform_view = tile_transform.GetTransformMatrix() * view_matrix;
+		glUniformMatrix4fv(tilemap_transform_view_uniform_id, 1, GL_TRUE, tilemap_transform_view.data);
 
-	glDrawElements(GL_TRIANGLES, 6 * 920, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 6 * 920, GL_UNSIGNED_INT, 0);
+	}
 
 	// Sprites
 	glUseProgram(assets.sprite_shader_program.id);
 	glBindVertexArray(assets.quad_mesh.vao_id);
 	glBindTexture(GL_TEXTURE_2D, assets.sprite_sheet.id);
 
-	Sprite& sprite = game_state.level.mouse.sprites[game_state.level.mouse.sprite_index];
+	if (level.mouse.active) {
+		RenderSprite(level.mouse.sprites[level.mouse.sprite_index], level.mouse.transform, assets);
+	}
+
+	if (level.cheese.active) {
+		RenderSprite(level.cheese.sprite, level.cheese.transform, assets);
+	}
+
+	if (level.red_key.active) {
+		RenderSprite(level.red_key.sprite, level.red_key.transform, assets);
+	}
+
+	if (level.yellow_key.active) {
+		RenderSprite(level.yellow_key.sprite, level.yellow_key.transform, assets);
+	}
+
+	if (level.blue_key.active) {
+		RenderSprite(level.blue_key.sprite, level.blue_key.transform, assets);
+	}
+
+	if (level.red_door.active) {
+		RenderSprite(level.red_door.sprite, level.red_door.transform, assets);
+	}
+
+	if (level.yellow_door.active) {
+		RenderSprite(level.yellow_door.sprite, level.yellow_door.transform, assets);
+	}
+
+	if (level.blue_door.active) {
+		RenderSprite(level.blue_door.sprite, level.blue_door.transform, assets);
+	}
+
+	for (int i = 0; i < 20; i++) {
+		if (level.moving_blocks[i].active) {
+			RenderSprite(level.moving_blocks[i].sprite, level.moving_blocks[i].transform, assets);
+		}
+	}
+
+	SDL_GL_SwapWindow(window);
+}
+
+void Renderer::RenderSprite(Sprite& sprite, Transform& transform, Assets& assets) {
 	GLint sprite_size_and_offset_uniform_id = glGetUniformLocation(assets.sprite_shader_program.id, "sprite_size_and_offset");
 	glUniform4f(sprite_size_and_offset_uniform_id, sprite.size.x, sprite.size.y, sprite.offset.x, sprite.offset.y);
 	GLint sprite_transform_view_uniform_id = glGetUniformLocation(assets.sprite_shader_program.id, "transform_view");
-	Matrix4D sprite_transform_view = game_state.level.mouse.transform.GetTransformMatrix() * view_matrix;
+	Matrix4D sprite_transform_view = transform.GetTransformMatrix() * view_matrix;
 	glUniformMatrix4fv(sprite_transform_view_uniform_id, 1, GL_TRUE, sprite_transform_view.data);
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-	SDL_GL_SwapWindow(window);
 }

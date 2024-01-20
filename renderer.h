@@ -22,6 +22,8 @@ public:
 	void Unload();
 
 	void Render(GameState& game_state, Assets& assets);
+private:
+	void RenderSprite(Sprite& sprite, Transform& transform, Assets& assets);
 };
 
 #endif

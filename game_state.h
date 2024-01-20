@@ -15,6 +15,13 @@ enum KeyColor {
 	Blue
 };
 
+enum MovingBlockBehavior {
+	Horizontal,
+	Vertical,
+	ToRight,
+	ToLeft
+};
+
 struct Transform {
 	Transform();
 
@@ -39,6 +46,7 @@ struct Sprite {
 };
 
 struct Mouse {
+	bool active;
 	Transform transform;
 	Sprite sprites[4];
 	int sprite_index;
@@ -47,23 +55,34 @@ struct Mouse {
 };
 
 struct Cheese {
+	bool active;
 	Transform transform;
 	Sprite sprite;
 };
 
 struct Key {
+	bool active;
 	KeyColor color;
 	Transform transform;
 	Sprite sprite;
 };
 
 struct Door {
+	bool active;
 	KeyColor color;
 	Transform transform;
 	Sprite sprite;
 };
 
+struct MovingBlock {
+	bool active;
+	MovingBlockBehavior behavior;
+	Transform transform;
+	Sprite sprite;
+};
+
 struct Tilemap {
+	bool active;
 	int tilesheet_index;
 	unsigned char tiles[920]; // 40 x 23
 
@@ -76,10 +95,18 @@ struct Tilemap {
 // Cheese
 // 3 Keys
 // 3 Doors
+// 20 Moving Blocks
 // Tilemap
 struct LevelState {
 	Mouse mouse;
 	Cheese cheese;
+	Key red_key;
+	Key yellow_key;
+	Key blue_key;
+	Door red_door;
+	Door yellow_door;
+	Door blue_door;
+	MovingBlock moving_blocks[20];
 	Tilemap tilemap;
 };
 
@@ -88,7 +115,5 @@ struct GameState {
 	int level_id;
 	LevelState level;
 };
-
-
 
 #endif
