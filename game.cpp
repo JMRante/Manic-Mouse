@@ -73,7 +73,7 @@ void Game::UpdateInputState(InputState& input_state) {
 			break;
 		case SDL_MOUSEMOTION:
 			Vector2D next_mouse_position = { (float)event.motion.x, (float)event.motion.y };
-			Vector2D mouse_direction = next_mouse_position - input_state.mouse_position;
+			Vector2D mouse_direction = hasSampledMousePosition ? next_mouse_position - input_state.mouse_position : Vector2D(1.0f, 0.0f);
 			input_state.mouse_direction_smoothed = mouse_direction;
 
 			for (int i = 0; i < 10; i++) {
@@ -90,6 +90,7 @@ void Game::UpdateInputState(InputState& input_state) {
 
 			input_state.mouse_speed = mouse_direction.Length();
 			input_state.mouse_position = next_mouse_position;
+			hasSampledMousePosition = true;
 			break;
 		}
 	}
@@ -128,7 +129,7 @@ void Game::LoadLevel(int level_id) {
 	mouse.sprites[2].size = { 32.0f, 32.0f };
 	mouse.sprites[2].offset = { 64.0f, 0.0f };
 	mouse.sprite_index = 0;
-	mouse.sprite_speed = 0.15f;
+	mouse.sprite_speed = 0.12f;
 	mouse.transform = Transform();
 	mouse.transform.SetScale({ 32.0f, 32.0f });
 
