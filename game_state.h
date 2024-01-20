@@ -69,6 +69,7 @@ struct Tilemap {
 
 	unsigned char GetTileByCoordinate(const int x, const int y);
 	Vector2D TilemapIndexToTilesheetOffset(const int tilemap_index);
+	bool IsPointInWall(const Vector2D point);
 };
 
 // Player

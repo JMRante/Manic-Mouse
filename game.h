@@ -21,7 +21,7 @@ private:
 
 	Assets assets;
 
-	bool hasSampledMousePosition = false;
+	bool has_sampled_mouse_position = false;
 
 	void UpdateInputState(InputState& input_state);
 	void UpdateGameState(GameState& game_state, InputState& input_state, float delta_time_seconds);

@@ -73,7 +73,7 @@ void Game::UpdateInputState(InputState& input_state) {
 			break;
 		case SDL_MOUSEMOTION:
 			Vector2D next_mouse_position = { (float)event.motion.x, (float)event.motion.y };
-			Vector2D mouse_direction = hasSampledMousePosition ? next_mouse_position - input_state.mouse_position : Vector2D(1.0f, 0.0f);
+			Vector2D mouse_direction = has_sampled_mouse_position ? next_mouse_position - input_state.mouse_position : Vector2D(1.0f, 0.0f);
 			input_state.mouse_direction_smoothed = mouse_direction;
 
 			for (int i = 0; i < 10; i++) {
@@ -90,7 +90,7 @@ void Game::UpdateInputState(InputState& input_state) {
 
 			input_state.mouse_speed = mouse_direction.Length();
 			input_state.mouse_position = next_mouse_position;
-			hasSampledMousePosition = true;
+			has_sampled_mouse_position = true;
 			break;
 		}
 	}
@@ -118,6 +118,9 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 	float angle = Vector2D::Angle(Vector2D::up * -1.0f, input_state.mouse_direction_smoothed);
 	angle = copysign(angle, input_state.mouse_direction_smoothed.x);
 	mouse.transform.SetRotationInRadians(angle);
+
+	Vector2D check_position = mouse.transform.GetPosition();
+	check_position.y = renderer.window_height - check_position.y;
 }
 
 void Game::LoadLevel(int level_id) {

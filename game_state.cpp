@@ -180,3 +180,12 @@ Vector2D Tilemap::TilemapIndexToTilesheetOffset(const int tilemap_index) {
 
     return tilesheet_offset;
 }
+
+bool Tilemap::IsPointInWall(const Vector2D point) {
+    float tile_x = point.x / 32.0f;
+    float tile_y = point.y / 32.0f;
+
+    int index = (int)floor(tile_x) + (floor(tile_y) * 40);
+
+    return tiles[index];
+}
