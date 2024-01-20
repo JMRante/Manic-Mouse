@@ -67,7 +67,7 @@ Vector2D Tilemap::TilemapIndexToTilesheetOffset(const int tilemap_index) {
     unsigned char tile = tiles[tilemap_index];
 
     if (tile == 0) {
-        return Vector2D(192.0f, 0.0f);
+        return Vector2D(192.0f, 224.0f);
     }
 
     int x = tilemap_index % 40;
@@ -174,6 +174,7 @@ Vector2D Tilemap::TilemapIndexToTilesheetOffset(const int tilemap_index) {
     case 65:  tilesheet_offset = Vector2D(6.0f, 6.0f); break;
     }
 
+    tilesheet_offset.y = 6.0f - tilesheet_offset.y + 1.0f;
     tilesheet_offset.x *= 32.0f;
     tilesheet_offset.y *= 32.0f;
 

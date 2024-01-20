@@ -26,13 +26,18 @@ class Assets
 {
 public:
 	ShaderProgram sprite_shader_program;
+	ShaderProgram tilemap_shader_program;
 	Texture sprite_sheet;
 	Texture tile_sheets[5];
 	Mesh quad_mesh;
+	Mesh level_mesh;
 
 	void Load();
 	void Unload();
+
+	void LoadLevelMesh(float* vertices, unsigned int vertex_length, unsigned int* indices, unsigned int index_length);
 private:
+	void LoadMesh(Mesh& mesh, float* vertices, unsigned int vertex_length, unsigned int* indices, unsigned int index_length);
 	void LoadQuadMesh();
 };
 

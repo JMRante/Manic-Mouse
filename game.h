@@ -23,6 +23,8 @@ private:
 
 	void UpdateInputState(InputState& input_state);
 	void UpdateGameState(GameState& game_state, InputState& input_state, float delta_time_seconds);
+
+	void LoadLevel(int level_id);
 };
 
 #endif

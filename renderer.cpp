@@ -60,36 +60,30 @@ void Renderer::Render(GameState& game_state, Assets& assets) {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glUseProgram(assets.sprite_shader_program.id);
-	glBindVertexArray(assets.quad_mesh.vao_id);
-
 	// Tilemap
+	glUseProgram(assets.tilemap_shader_program.id);
+	glBindVertexArray(assets.level_mesh.vao_id);
 	glBindTexture(GL_TEXTURE_2D, assets.tile_sheets[game_state.level.tilemap.tilesheet_index].id);
 
-	for (int i = 0; i < 920; i++) {
-		Vector2D tilesheet_offset = game_state.level.tilemap.TilemapIndexToTilesheetOffset(i);
+	GLint tilemap_transform_view_uniform_id = glGetUniformLocation(assets.tilemap_shader_program.id, "transform_view");
+	Transform tile_transform = Transform();
+	tile_transform.SetPosition({ 0.0f, 0.0f });
+	Matrix4D tilemap_transform_view = tile_transform.GetTransformMatrix() * view_matrix;
+	glUniformMatrix4fv(tilemap_transform_view_uniform_id, 1, GL_TRUE, tilemap_transform_view.data);
 
-		GLint sprite_size_and_offset_uniform_id = glGetUniformLocation(assets.sprite_shader_program.id, "sprite_size_and_offset");
-		glUniform4f(sprite_size_and_offset_uniform_id, 32.0f, 32.0f, tilesheet_offset.x, tilesheet_offset.y);
-		GLint transform_view_uniform_id = glGetUniformLocation(assets.sprite_shader_program.id, "transform_view");
-		Transform tile_transform = Transform();
-		tile_transform.SetPosition({ ((float)(i % 40) * 32.0f) + 16.0f, ((float)window_height - ((float)(i / 40)) * 32.0f) - 16.0f });
-		tile_transform.SetScale({ 32.0f, 32.0f });
-		Matrix4D transform_view = tile_transform.GetTransformMatrix() * view_matrix;
-		glUniformMatrix4fv(transform_view_uniform_id, 1, GL_TRUE, transform_view.data);
-
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	}
+	glDrawElements(GL_TRIANGLES, 6 * 920, GL_UNSIGNED_INT, 0);
 
 	// Sprites
+	glUseProgram(assets.sprite_shader_program.id);
+	glBindVertexArray(assets.quad_mesh.vao_id);
 	glBindTexture(GL_TEXTURE_2D, assets.sprite_sheet.id);
 
 	Sprite& sprite = game_state.level.mouse.sprites[game_state.level.mouse.sprite_index];
 	GLint sprite_size_and_offset_uniform_id = glGetUniformLocation(assets.sprite_shader_program.id, "sprite_size_and_offset");
 	glUniform4f(sprite_size_and_offset_uniform_id, sprite.size.x, sprite.size.y, sprite.offset.x, sprite.offset.y);
-	GLint transform_view_uniform_id = glGetUniformLocation(assets.sprite_shader_program.id, "transform_view");
-	Matrix4D transform_view = game_state.level.mouse.transform.GetTransformMatrix() * view_matrix;
-	glUniformMatrix4fv(transform_view_uniform_id, 1, GL_TRUE, transform_view.data);
+	GLint sprite_transform_view_uniform_id = glGetUniformLocation(assets.sprite_shader_program.id, "transform_view");
+	Matrix4D sprite_transform_view = game_state.level.mouse.transform.GetTransformMatrix() * view_matrix;
+	glUniformMatrix4fv(sprite_transform_view_uniform_id, 1, GL_TRUE, sprite_transform_view.data);
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

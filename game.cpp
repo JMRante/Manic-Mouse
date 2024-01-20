@@ -19,55 +19,12 @@ bool Game::Start() {
 		return false;
 	}
 
+	assets.Load();
+
 	game_state.mode = Gameplay;
 	game_state.level_id = 0;
 
-	Mouse& mouse = game_state.level.mouse;
-	mouse.sprites[0].size = {32.0f, 32.0f};
-	mouse.sprites[0].offset = { 0.0f, 0.0f };
-	mouse.sprites[1].size = { 32.0f, 32.0f };
-	mouse.sprites[1].offset = { 32.0f, 0.0f };
-	mouse.sprites[2].size = { 32.0f, 32.0f };
-	mouse.sprites[2].offset = { 64.0f, 0.0f };
-	mouse.sprite_index = 0;
-	mouse.sprite_speed = 0.15f;
-	mouse.transform = Transform();
-	mouse.transform.SetScale({ 32.0f, 32.0f });
-
-	char test_level_map[920] = {
-		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
-		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
-		1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
-		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
-		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
-		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,
-		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,
-		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,
-		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
-		1,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,
-		1,1,0,0,0,1,1,0,0,0,0,0,1,1,1,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,
-		1,1,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,
-		1,1,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
-		1,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
-		1,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,
-		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
-		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,
-		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
-		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-	};
-
-	Tilemap& tilemap = game_state.level.tilemap;
-	tilemap.tilesheet_index = 0;
-
-	for (int i = 0; i < 920; i++) {
-		tilemap.tiles[i] = test_level_map[i];
-	}
-
-	assets.Load();
+	LoadLevel(game_state.level_id);
 
 	return true;
 }
@@ -160,4 +117,96 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 	float angle = Vector2D::Angle(Vector2D::up * -1.0f, input_state.mouse_direction_smoothed);
 	angle = copysign(angle, input_state.mouse_direction_smoothed.x);
 	mouse.transform.SetRotationInRadians(angle);
+}
+
+void Game::LoadLevel(int level_id) {
+	Mouse& mouse = game_state.level.mouse;
+	mouse.sprites[0].size = { 32.0f, 32.0f };
+	mouse.sprites[0].offset = { 0.0f, 0.0f };
+	mouse.sprites[1].size = { 32.0f, 32.0f };
+	mouse.sprites[1].offset = { 32.0f, 0.0f };
+	mouse.sprites[2].size = { 32.0f, 32.0f };
+	mouse.sprites[2].offset = { 64.0f, 0.0f };
+	mouse.sprite_index = 0;
+	mouse.sprite_speed = 0.15f;
+	mouse.transform = Transform();
+	mouse.transform.SetScale({ 32.0f, 32.0f });
+
+	char test_level_map[920] = {
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
+		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
+		1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
+		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
+		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
+		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,
+		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,
+		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,
+		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
+		1,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,
+		1,1,0,0,0,1,1,0,0,0,0,0,1,1,1,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,
+		1,1,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,
+		1,1,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
+		1,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
+		1,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,
+		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
+		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,
+		1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+	};
+
+	Tilemap& tilemap = game_state.level.tilemap;
+	tilemap.tilesheet_index = 0;
+
+	for (int i = 0; i < 920; i++) {
+		tilemap.tiles[i] = test_level_map[i];
+	}
+
+	int tilemap_vertex_count = 5 * 4 * 920;
+	int tilemap_index_count = 6 * 920;
+
+	float* vertices = new float[tilemap_vertex_count]();
+	unsigned int* indices = new unsigned int[tilemap_index_count]();
+
+	for (int i = 0; i < 920; i++) {
+		int x = i % 40;
+		int y = i / 40;
+
+		Vector2D tilesheet_offset = tilemap.TilemapIndexToTilesheetOffset(i);
+
+		for (int j = 0; j < 2; j++) {
+			for (int k = 0; k < 2; k++) {
+				int tile_quad_interval = i * 5 * 4;
+				int tile_vertex_interval = (j + (k * 2)) * 5;
+				int interval = tile_quad_interval + tile_vertex_interval;
+
+				int tilesheet_width = assets.tile_sheets[tilemap.tilesheet_index].width;
+				int tilesheet_height = assets.tile_sheets[tilemap.tilesheet_index].height;
+
+				vertices[interval] = (x + j) * 32.0f;
+				vertices[interval + 1] = renderer.window_height - ((y + k) * 32.0f);
+				vertices[interval + 2] = 0.0f;
+				vertices[interval + 3] = (tilesheet_offset.x / tilesheet_width) + (j * (32.0f / tilesheet_width));
+				vertices[interval + 4] = (tilesheet_offset.y / tilesheet_height) + ((1.0f - k) * (32.0f / tilesheet_height));
+			}
+		}
+
+		int quad_index_interval = i * 6;
+		int quad_vertex_interval = i * 4;
+
+		indices[quad_index_interval] = quad_vertex_interval;
+		indices[quad_index_interval + 1] = quad_vertex_interval + 2;
+		indices[quad_index_interval + 2] = quad_vertex_interval + 1;
+		indices[quad_index_interval + 3] = quad_vertex_interval + 1;
+		indices[quad_index_interval + 4] = quad_vertex_interval + 2;
+		indices[quad_index_interval + 5] = quad_vertex_interval + 3;
+	}
+
+	assets.LoadLevelMesh(vertices, tilemap_vertex_count * sizeof(float), indices, tilemap_index_count * sizeof(unsigned int));
+
+	delete[] vertices;
+	delete[] indices;
 }

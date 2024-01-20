@@ -28,7 +28,6 @@ ShaderProgram DataLoader::LoadShader(const std::string& vertex_shader_file_path,
 	std::string vertex_shader_src_str = DataLoader::LoadText(vertex_shader_file_path);
 	std::string fragment_shader_src_str = DataLoader::LoadText(fragment_shader_file_path);
 
-
 	const GLchar* vertex_shader_src = vertex_shader_src_str.c_str();
 	const GLchar* fragment_shader_src = fragment_shader_src_str.c_str();
 
