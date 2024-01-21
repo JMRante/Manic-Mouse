@@ -24,7 +24,6 @@ bool Game::Start() {
 	game_state.mode = Gameplay;
 	game_state.level_id = 0;
 
-	LoadObjectDefaults();
 	LoadLevel(game_state.level_id);
 
 	return true;
@@ -127,86 +126,6 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 	float angle = Vector2D::Angle(Vector2D::up * -1.0f, input_state.mouse_direction_smoothed);
 	angle = copysign(angle, input_state.mouse_direction_smoothed.x);
 	mouse.transform.SetRotationInRadians(angle);
-}
-
-void Game::LoadObjectDefaults() {
-	Mouse& mouse = game_state.level.mouse;
-	mouse.active = true;
-	mouse.sprites[0].size = { 32.0f, 32.0f };
-	mouse.sprites[0].offset = { 0.0f, 0.0f };
-	mouse.sprites[1].size = { 32.0f, 32.0f };
-	mouse.sprites[1].offset = { 32.0f, 0.0f };
-	mouse.sprites[2].size = { 32.0f, 32.0f };
-	mouse.sprites[2].offset = { 64.0f, 0.0f };
-	mouse.sprite_index = 0;
-	mouse.sprite_speed = 0.12f;
-	mouse.transform = Transform();
-	mouse.transform.SetScale(mouse.sprites[0].size);
-
-	Cheese& cheese = game_state.level.cheese;
-	cheese.active = false;
-	cheese.sprite.size = { 32.0f, 32.0f };
-	cheese.sprite.offset = { 96.0f, 0.0f };
-	cheese.transform = Transform();
-	cheese.transform.SetScale(cheese.sprite.size);
-
-	Key& red_key = game_state.level.red_key;
-	red_key.active = false;
-	red_key.sprite.size = { 32.0f, 32.0f };
-	red_key.sprite.offset = { 0.0f, 96.0f };
-	red_key.transform = Transform();
-	red_key.transform.SetScale(red_key.sprite.size);
-	red_key.color = Red;
-
-	Key& yellow_key = game_state.level.yellow_key;
-	yellow_key.active = false;
-	yellow_key.sprite.size = { 32.0f, 32.0f };
-	yellow_key.sprite.offset = { 32.0f, 96.0f };
-	yellow_key.transform = Transform();
-	yellow_key.transform.SetScale(yellow_key.sprite.size);
-	yellow_key.color = Yellow;
-
-	Key& blue_key = game_state.level.blue_key;
-	blue_key.active = false;
-	blue_key.sprite.size = { 32.0f, 32.0f };
-	blue_key.sprite.offset = { 64.0f, 96.0f };
-	blue_key.transform = Transform();
-	blue_key.transform.SetScale(blue_key.sprite.size);
-	blue_key.color = Blue;
-
-	Door& red_door = game_state.level.red_door;
-	red_door.active = false;
-	red_door.sprite.size = { 32.0f, 32.0f };
-	red_door.sprite.offset = { 0.0f, 64.0f };
-	red_door.transform = Transform();
-	red_door.transform.SetScale(red_door.sprite.size);
-	red_door.color = Red;
-
-	Door& yellow_door = game_state.level.yellow_door;
-	yellow_door.active = false;
-	yellow_door.sprite.size = { 32.0f, 32.0f };
-	yellow_door.sprite.offset = { 32.0f, 64.0f };
-	yellow_door.transform = Transform();
-	yellow_door.transform.SetScale(yellow_door.sprite.size);
-	yellow_door.color = Yellow;
-
-	Door& blue_door = game_state.level.blue_door;
-	blue_door.active = false;
-	blue_door.sprite.size = { 32.0f, 32.0f };
-	blue_door.sprite.offset = { 64.0f, 64.0f };
-	blue_door.transform = Transform();
-	blue_door.transform.SetScale(blue_door.sprite.size);
-	blue_door.color = Blue;
-
-	for (int i = 0; i < 20; i++) {
-		MovingBlock& moving_block = game_state.level.moving_blocks[i];
-		moving_block.active = false;
-		moving_block.sprite.size = { 32.0f, 32.0f };
-		moving_block.sprite.offset = { 32.0f, 32.0f };
-		moving_block.transform = Transform();
-		moving_block.transform.SetScale(moving_block.sprite.size);
-		moving_block.behavior = Horizontal;
-	}
 }
 
 void Game::LoadLevel(int level_id) {

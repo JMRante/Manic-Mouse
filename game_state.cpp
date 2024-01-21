@@ -33,6 +33,18 @@ void Transform::SetPosition(Vector2D position) {
 	transform_matrix.data[13] = -position.y;
 }
 
+void Transform::SetPositionX(float x) {
+    this->position.x = x;
+
+    transform_matrix.data[12] = x;
+}
+
+void Transform::SetPositionY(float y) {
+    this->position.y = y;
+
+    transform_matrix.data[13] = -y;
+}
+
 void Transform::SetScale(Vector2D scale) {
 	this->scale = scale;
 
@@ -51,6 +63,80 @@ void Transform::SetRotationInRadians(float rotation_radians) {
 
 	transform_matrix.data[4] = sin(rotation_radians) * scale.y;
 	transform_matrix.data[5] = cos(rotation_radians) * scale.y;
+}
+
+LevelState::LevelState() {
+    mouse.active = true;
+    mouse.sprites[0].size = { 32.0f, 32.0f };
+    mouse.sprites[0].offset = { 0.0f, 0.0f };
+    mouse.sprites[1].size = { 32.0f, 32.0f };
+    mouse.sprites[1].offset = { 32.0f, 0.0f };
+    mouse.sprites[2].size = { 32.0f, 32.0f };
+    mouse.sprites[2].offset = { 64.0f, 0.0f };
+    mouse.sprite_index = 0;
+    mouse.sprite_speed = 0.12f;
+    mouse.transform = Transform();
+    mouse.transform.SetScale(mouse.sprites[0].size);
+
+    cheese.active = false;
+    cheese.sprite.size = { 32.0f, 32.0f };
+    cheese.sprite.offset = { 96.0f, 0.0f };
+    cheese.transform = Transform();
+    cheese.transform.SetScale(cheese.sprite.size);
+
+    red_key.active = false;
+    red_key.sprite.size = { 32.0f, 32.0f };
+    red_key.sprite.offset = { 0.0f, 96.0f };
+    red_key.transform = Transform();
+    red_key.transform.SetScale(red_key.sprite.size);
+    red_key.color = Red;
+
+    yellow_key.active = false;
+    yellow_key.sprite.size = { 32.0f, 32.0f };
+    yellow_key.sprite.offset = { 32.0f, 96.0f };
+    yellow_key.transform = Transform();
+    yellow_key.transform.SetScale(yellow_key.sprite.size);
+    yellow_key.color = Yellow;
+
+    blue_key.active = false;
+    blue_key.sprite.size = { 32.0f, 32.0f };
+    blue_key.sprite.offset = { 64.0f, 96.0f };
+    blue_key.transform = Transform();
+    blue_key.transform.SetScale(blue_key.sprite.size);
+    blue_key.color = Blue;
+
+    red_door.active = false;
+    red_door.sprite.size = { 32.0f, 32.0f };
+    red_door.sprite.offset = { 0.0f, 64.0f };
+    red_door.transform = Transform();
+    red_door.transform.SetScale(red_door.sprite.size);
+    red_door.color = Red;
+
+    yellow_door.active = false;
+    yellow_door.sprite.size = { 32.0f, 32.0f };
+    yellow_door.sprite.offset = { 32.0f, 64.0f };
+    yellow_door.transform = Transform();
+    yellow_door.transform.SetScale(yellow_door.sprite.size);
+    yellow_door.color = Yellow;
+
+    blue_door.active = false;
+    blue_door.sprite.size = { 32.0f, 32.0f };
+    blue_door.sprite.offset = { 64.0f, 64.0f };
+    blue_door.transform = Transform();
+    blue_door.transform.SetScale(blue_door.sprite.size);
+    blue_door.color = Blue;
+
+    moving_block_count = 0;
+
+    for (int i = 0; i < 20; i++) {
+        MovingBlock& moving_block = moving_blocks[i];
+        moving_block.active = false;
+        moving_block.sprite.size = { 32.0f, 32.0f };
+        moving_block.sprite.offset = { 32.0f, 32.0f };
+        moving_block.transform = Transform();
+        moving_block.transform.SetScale(moving_block.sprite.size);
+        moving_block.behavior = Horizontal;
+    }
 }
 
 unsigned char Tilemap::GetTileByCoordinate(const int x, const int y) {
@@ -185,7 +271,7 @@ bool Tilemap::IsPointInWall(const Vector2D point) {
     float tile_x = point.x / 32.0f;
     float tile_y = point.y / 32.0f;
 
-    int index = (int)floor(tile_x) + (floor(tile_y) * 40);
+    int index = (int)floor(tile_x) + ((int)floor(tile_y) * 40);
 
     return tiles[index];
 }

@@ -3,6 +3,9 @@
 #define MANICMOUSE_ASSETS_H_
 
 #include <GL/glew.h>
+#include <vector>
+
+#include "game_state.h"
 
 struct ShaderProgram {
 	GLuint vertex_shader_id;
@@ -31,6 +34,8 @@ public:
 	Texture tile_sheets[5];
 	Mesh quad_mesh;
 	Mesh level_mesh;
+
+	std::vector<LevelState*> levels;
 
 	void Load();
 	void Unload();

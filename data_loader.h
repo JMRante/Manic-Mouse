@@ -4,7 +4,24 @@
 
 #include <string>
 
+#include <vector>
+
 #include "renderer.h"
+
+enum LevelParserState {
+	ParseStart,
+	ParseCheese,
+	ParseRedKey,
+	ParseYellowKey,
+	ParseBlueKey,
+	ParseRedDoor,
+	ParseYellowDoor,
+	ParseBlueDoor,
+	ParseMovingBlocksCount,
+	ParseMovingBlocks,
+	ParseTileSheet,
+	ParseTileMap
+};
 
 class DataLoader
 {
@@ -13,7 +30,7 @@ public:
 	static ShaderProgram LoadShader(const std::string& vertex_shader_file_path, const std::string& fragment_shader_file_path);
 	static Texture LoadPNG(const std::string& png_file_path);
 	static void LoadConfig(const std::string& config_file_path);
-	static void LoadLevel(const std::string& level_file_path);
+	static void LoadLevels(const std::string& levels_file_path, std::vector<LevelState*>& levels);
 private:
 	static void FlipSurface(SDL_Surface* surface);
 };

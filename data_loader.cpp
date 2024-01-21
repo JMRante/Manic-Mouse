@@ -8,6 +8,7 @@
 #include <sstream>
 
 #include "renderer.h"
+#include "game_state.h"
 
 std::string DataLoader::LoadText(const std::string& text_file_path) {
 	std::ifstream file_input_stream;
@@ -105,8 +106,105 @@ void DataLoader::LoadConfig(const std::string& config_file_path) {
 
 }
 
-void DataLoader::LoadLevel(const std::string& level_file_path) {
+void DataLoader::LoadLevels(const std::string& levels_file_path, std::vector<LevelState*>& levels) {
+	std::ifstream file_input_stream;
+	file_input_stream.open(levels_file_path);
 
+	if (file_input_stream.is_open()) {
+		std::string line;
+		LevelParserState parser_state = ParseStart;
+		int object_counter = 0;
+		int property_counter = 0;
+		LevelState* level = new LevelState();
+
+		while (std::getline(file_input_stream, line)) {
+			switch (parser_state) {
+			case ParseStart:
+				switch (property_counter) {
+				case 0: level->start.x = std::stof(line); property_counter++; break;
+				case 1: level->start.y = std::stof(line); property_counter = 0; parser_state = ParseCheese; break;
+				}
+				break;
+			case ParseCheese:
+				switch (property_counter) {
+				case 0: level->cheese.transform.SetPositionX(std::stof(line)); property_counter++; break;
+				case 1: level->cheese.transform.SetPositionY(std::stof(line)); property_counter = 0; parser_state = ParseRedKey; break;
+				}
+				break;
+			case ParseRedKey:
+				switch (property_counter) {
+				case 0: level->red_key.active = (bool)std::stoi(line); property_counter++; break;
+				case 1: level->red_key.transform.SetPositionX(std::stof(line)); property_counter++; break;
+				case 2: level->red_key.transform.SetPositionY(std::stof(line)); property_counter = 0; parser_state = ParseYellowKey; break;
+				}
+				break;
+			case ParseYellowKey:
+				switch (property_counter) {
+				case 0: level->yellow_key.active = (bool)std::stoi(line); property_counter++; break;
+				case 1: level->yellow_key.transform.SetPositionX(std::stof(line)); property_counter++; break;
+				case 2: level->yellow_key.transform.SetPositionY(std::stof(line)); property_counter = 0; parser_state = ParseBlueKey; break;
+				}
+				break;
+			case ParseBlueKey:
+				switch (property_counter) {
+				case 0: level->blue_key.active = (bool)std::stoi(line); property_counter++; break;
+				case 1: level->blue_key.transform.SetPositionX(std::stof(line)); property_counter++; break;
+				case 2: level->blue_key.transform.SetPositionY(std::stof(line)); property_counter = 0; parser_state = ParseRedDoor; break;
+				}
+				break;
+			case ParseRedDoor:
+				switch (property_counter) {
+				case 0: level->red_door.active = (bool)std::stoi(line); property_counter++; break;
+				case 1: level->red_door.transform.SetPositionX(std::stof(line)); property_counter++; break;
+				case 2: level->red_door.transform.SetPositionY(std::stof(line)); property_counter = 0; parser_state = ParseYellowDoor; break;
+				}
+				break;
+			case ParseYellowDoor:
+				switch (property_counter) {
+				case 0: level->yellow_door.active = (bool)std::stoi(line); property_counter++; break;
+				case 1: level->yellow_door.transform.SetPositionX(std::stof(line)); property_counter++; break;
+				case 2: level->yellow_door.transform.SetPositionY(std::stof(line)); property_counter = 0; parser_state = ParseBlueDoor; break;
+				}
+				break;
+			case ParseBlueDoor:
+				switch (property_counter) {
+				case 0: level->blue_door.active = (bool)std::stoi(line); property_counter++; break;
+				case 1: level->blue_door.transform.SetPositionX(std::stof(line)); property_counter++; break;
+				case 2: level->blue_door.transform.SetPositionY(std::stof(line)); property_counter = 0; parser_state = ParseMovingBlocksCount; break;
+				}
+				break;
+			case ParseMovingBlocksCount:
+				level->moving_block_count = std::stoi(line);
+				parser_state = level->moving_block_count > 0 ? ParseMovingBlocks : ParseTileSheet;
+				break;
+			case ParseMovingBlocks:
+				if (object_counter < level->moving_block_count) {
+					MovingBlock& moving_block = level->moving_blocks[object_counter];
+					switch (property_counter) {
+						case 0: moving_block.behavior = (MovingBlockBehavior)std::stoi(line); property_counter++; break;
+						case 1: moving_block.transform.SetPositionX(std::stof(line)); property_counter++; break;
+						case 2: moving_block.transform.SetPositionY(std::stof(line)); property_counter = 0; object_counter++;  break;
+					}
+					break;
+				} else {
+					parser_state = ParseTileSheet;
+					object_counter = 0;
+				}
+			case ParseTileSheet:
+				level->tilemap.tilesheet_index = std::stoi(line);
+				parser_state = ParseTileMap;
+				break;
+			case ParseTileMap:
+				int i = 0;
+
+				for (int i = 0; i < 920; i++) {
+					level->tilemap.tiles[i] = std::stoi(line.substr(i, 1));
+				}
+
+				parser_state = ParseStart;
+			}
+		}
+	}
 }
 
 // From: https://stackoverflow.com/questions/65815332/flipping-a-surface-vertically-in-sdl2

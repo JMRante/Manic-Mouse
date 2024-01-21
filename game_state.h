@@ -29,6 +29,8 @@ struct Transform {
 	Matrix4D GetTransformMatrix();
 
 	void SetPosition(Vector2D position);
+	void SetPositionX(float x);
+	void SetPositionY(float y);
 	void SetScale(Vector2D scale);
 	void SetRotationInRadians(float rotation_radians);
 private:
@@ -96,6 +98,8 @@ struct Tilemap {
 // 20 Moving Blocks
 // Tilemap
 struct LevelState {
+	LevelState();
+
 	Vector2D start;
 	Mouse mouse;
 	Cheese cheese;
@@ -105,6 +109,7 @@ struct LevelState {
 	Door red_door;
 	Door yellow_door;
 	Door blue_door;
+	int moving_block_count;
 	MovingBlock moving_blocks[20];
 	Tilemap tilemap;
 };

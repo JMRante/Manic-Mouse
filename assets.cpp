@@ -15,6 +15,8 @@ void Assets::Load() {
 	tile_sheets[3] = DataLoader::LoadPNG("Assets/mm_tileset4.png");
 	tile_sheets[4] = DataLoader::LoadPNG("Assets/mm_tileset5.png");
 
+	DataLoader::LoadLevels("Assets/LevelData/level_data.lvls", levels);
+
 	LoadQuadMesh();
 }
 
@@ -36,6 +38,10 @@ void Assets::Unload() {
 	glDeleteVertexArrays(1, &level_mesh.vao_id);
 	glDeleteBuffers(1, &level_mesh.vbo_id);
 	glDeleteBuffers(1, &level_mesh.ebo_id);
+
+	for (int i = 0; i < levels.size(); i++) {
+		delete levels[i];
+	}
 }
 
 void Assets::LoadLevelMesh(float* vertices, unsigned int vertex_length, unsigned int* indices, unsigned int index_length) {
