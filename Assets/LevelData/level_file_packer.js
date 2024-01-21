@@ -133,7 +133,7 @@ fs.readdir('./', (err, files) => {
       levelDataString += movingBlock.y + '\n'
     })
     levelDataString += levelData.tilemap.id + '\n'
-    levelDataString += levelData.tilemap.data + '\n'
+    levelDataString += levelData.tilemap.data.join('') + '\n'
 
     levelsDataString += levelDataString
   })
