@@ -17,9 +17,7 @@ enum KeyColor {
 
 enum MovingBlockBehavior {
 	Horizontal,
-	Vertical,
-	ToRight,
-	ToLeft
+	Vertical
 };
 
 struct Transform {
@@ -98,6 +96,7 @@ struct Tilemap {
 // 20 Moving Blocks
 // Tilemap
 struct LevelState {
+	Vector2D start;
 	Mouse mouse;
 	Cheese cheese;
 	Key red_key;
