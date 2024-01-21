@@ -1,0 +1,127 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "mm_level001.json": {
+            "scale": 1.3144140624999998,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 636.4052423548992,
+                "y": 397.13513031590844
+            }
+        },
+        "mm_level001.tmx": {
+            "scale": 1.3144140624999998,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 640.2092186989213,
+                "y": 368.22491010134036
+            }
+        },
+        "mm_level002.json": {
+            "scale": 1.3144140624999998,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 631.8404707420726,
+                "y": 351.4874141876431
+            }
+        },
+        "mm_level003.json": {
+            "scale": 1.3144140624999998,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 632.6012660108771,
+                "y": 352.2482094564475
+            }
+        },
+        "mm_level01.json": {
+            "expandedObjectLayers": [
+                6
+            ],
+            "scale": 1.3144140624999998,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 650.0995571933789,
+                "y": 349.9658236500343
+            }
+        },
+        "mm_level01.tmx": {
+            "expandedObjectLayers": [
+                6
+            ],
+            "scale": 1.3144140624999998,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 639.4484234301169,
+                "y": 367.08371719813374
+            }
+        },
+        "mm_level02.tmx": {
+            "expandedObjectLayers": [
+                6
+            ],
+            "scale": 1.3144140624999998,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 639.8288210645192,
+                "y": 367.8445124669381
+            }
+        },
+        "objects.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset2.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset3.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset4.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset5.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.externalTilesetPath": "C:/Base/Dev/C++/ManicMouse/Assets/LevelData",
+    "last.imagePath": "C:/Base/Dev/C++/ManicMouse/Assets",
+    "map.height": 23,
+    "map.lastUsedFormat": "json",
+    "map.layerDataFormat": null,
+    "map.width": 40,
+    "openFiles": [
+    ],
+    "project": "manic_mouse_level_data.tiled-project",
+    "recentFiles": [
+        "tileset.tsx",
+        "mm_level002.json",
+        "mm_level001.json",
+        "tileset3.tsx",
+        "tileset2.tsx",
+        "tileset5.tsx",
+        "tileset4.tsx",
+        "mm_level001.tmx",
+        "mm_level02.tmx",
+        "mm_level01.json",
+        "mm_level01.tmx",
+        "objects.tsx"
+    ],
+    "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
+    "tileset.lastUsedFormat": "tsx"
+}
