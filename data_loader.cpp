@@ -201,6 +201,9 @@ void DataLoader::LoadLevels(const std::string& levels_file_path, std::vector<Lev
 					level->tilemap.tiles[i] = std::stoi(line.substr(i, 1));
 				}
 
+				levels.push_back(level);
+				level = new LevelState();
+
 				parser_state = ParseStart;
 			}
 		}
