@@ -430,3 +430,6 @@ FodyWeavers.xsd
 *.exe
 *.out
 *.app
+
+# Tiled
+*.tiled-session
