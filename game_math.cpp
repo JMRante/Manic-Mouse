@@ -139,13 +139,44 @@ Matrix4D operator*(const Matrix4D& matrix_left, const Matrix4D& matrix_right) {
 	return result_matrix;
 }
 
+float Lerp(float start, float end, float t) {
+	return (1 - t) * start + t * end;
+}
+
+Vector2D LerpVector2D(Vector2D& start, Vector2D& end, float t) {
+	return Vector2D(Lerp(start.x, end.x, t), Lerp(start.y, end.y, t));
+}
+
 bool IsPointCollidingWithCircle(Vector2D point, Vector2D circle_origin, float circle_radius) {
 	Vector2D between = point - circle_origin;
 
 	if (between.LengthSquared() > circle_radius * circle_radius) {
 		return false;
-	}
-	else {
+	} else {
 		return true;
 	}
+}
+
+bool IsContinuousPointCollidingWithTileArray(Vector2D previous_point, Vector2D current_point, Vector2D& collision_point, unsigned char* tile_data) {
+	Vector2D path = current_point - previous_point;
+	int segment_count = (int)ceil(path.Length() / 32.0f);
+
+	for (int i = 0; i <= segment_count; i++) {
+		Vector2D point_to_check = current_point;
+
+		if (segment_count != 0) {
+			point_to_check = LerpVector2D(previous_point, current_point, i / ((float)segment_count * 32.0f));
+		}
+
+		int point_x_index = (int)floor(point_to_check.x / 32.0f);
+		int point_y_index = (int)floor(point_to_check.y / 32.0f);
+		int tile_index = point_x_index + (point_y_index * 40);
+
+		if (tile_data[tile_index] == 1) {
+			collision_point = point_to_check;
+			return true;
+		}
+	}
+
+	return false;
 }

@@ -108,6 +108,8 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 	Mouse& mouse = game_state.level.mouse;
 	Cheese& cheese = game_state.level.cheese;
 
+	Vector2D mouse_last_position = mouse.transform.GetPosition();
+
 	mouse.transform.SetPosition({
 		input_state.mouse_position.x,
 		input_state.mouse_position.y
@@ -131,6 +133,17 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 	if (IsPointCollidingWithCircle(mouse.transform.GetPosition(), cheese.transform.GetPosition(), 24.0f)) {
 		game_state.level_id = game_state.level_id < assets.levels.size() - 1 ? game_state.level_id + 1 : 0;
 		LoadLevel(game_state.level_id);
+	}
+
+	Vector2D wall_collision_point;
+	if (IsContinuousPointCollidingWithTileArray(mouse_last_position, mouse.transform.GetPosition(), wall_collision_point, game_state.level.tilemap.tiles)) {
+		mouse.sprites[0].offset = { 0.0f, 64.0f };
+		mouse.sprites[1].offset = { 0.0f, 64.0f };
+		mouse.sprites[2].offset = { 0.0f, 64.0f };
+	} else {
+		mouse.sprites[0].offset = { 0.0f, 0.0f };
+		mouse.sprites[1].offset = { 32.0f, 0.0f };
+		mouse.sprites[2].offset = { 64.0f, 0.0f };
 	}
 }
 

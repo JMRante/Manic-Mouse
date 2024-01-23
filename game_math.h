@@ -35,7 +35,10 @@ struct Matrix4D {
 	friend Matrix4D operator*(const Matrix4D& matrix_left, const Matrix4D& matrix_right);
 };
 
+float Lerp(float start, float end, float t);
+Vector2D LerpVector2D(Vector2D& start, Vector2D& end, float t);
 
 bool IsPointCollidingWithCircle(Vector2D point, Vector2D circle_origin, float circle_radius);
+bool IsContinuousPointCollidingWithTileArray(Vector2D previous_point, Vector2D current_point, Vector2D& collision_point, unsigned char* tile_data);
 
 #endif
