@@ -143,11 +143,11 @@ float Lerp(float start, float end, float t) {
 	return (1 - t) * start + t * end;
 }
 
-Vector2D LerpVector2D(Vector2D& start, Vector2D& end, float t) {
+Vector2D LerpVector2D(const Vector2D& start, const Vector2D& end, float t) {
 	return Vector2D(Lerp(start.x, end.x, t), Lerp(start.y, end.y, t));
 }
 
-bool IsPointCollidingWithCircle(Vector2D point, Vector2D circle_origin, float circle_radius) {
+bool IsPointCollidingWithCircle(const Vector2D& point, const Vector2D& circle_origin, float circle_radius) {
 	Vector2D between = point - circle_origin;
 
 	if (between.LengthSquared() > circle_radius * circle_radius) {
@@ -157,7 +157,7 @@ bool IsPointCollidingWithCircle(Vector2D point, Vector2D circle_origin, float ci
 	}
 }
 
-bool IsContinuousPointCollidingWithTileArray(Vector2D previous_point, Vector2D current_point, Vector2D& collision_point, unsigned char* tile_data) {
+bool IsContinuousPointCollidingWithTileArray(const Vector2D& previous_point, const Vector2D& current_point, Vector2D& collision_point, unsigned char* tile_data) {
 	Vector2D path = current_point - previous_point;
 	int segment_count = (int)ceil(path.Length() / 32.0f);
 

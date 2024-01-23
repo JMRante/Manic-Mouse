@@ -36,9 +36,9 @@ struct Matrix4D {
 };
 
 float Lerp(float start, float end, float t);
-Vector2D LerpVector2D(Vector2D& start, Vector2D& end, float t);
+Vector2D LerpVector2D(const Vector2D& start, const Vector2D& end, float t);
 
-bool IsPointCollidingWithCircle(Vector2D point, Vector2D circle_origin, float circle_radius);
-bool IsContinuousPointCollidingWithTileArray(Vector2D previous_point, Vector2D current_point, Vector2D& collision_point, unsigned char* tile_data);
+bool IsPointCollidingWithCircle(const Vector2D& point, const Vector2D& circle_origin, float circle_radius);
+bool IsContinuousPointCollidingWithTileArray(const Vector2D& previous_point, const Vector2D& current_point, Vector2D& collision_point, unsigned char* tile_data);
 
 #endif
