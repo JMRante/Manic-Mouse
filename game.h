@@ -8,8 +8,7 @@
 #include "input_state.h"
 #include "renderer.h"
 
-class Game
-{
+class Game {
 public:
 	bool Start();
 	void Run();

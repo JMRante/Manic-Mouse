@@ -45,6 +45,10 @@ void Assets::Unload() {
 }
 
 void Assets::LoadLevelMesh(float* vertices, unsigned int vertex_length, unsigned int* indices, unsigned int index_length) {
+	glDeleteVertexArrays(1, &level_mesh.vao_id);
+	glDeleteBuffers(1, &level_mesh.vbo_id);
+	glDeleteBuffers(1, &level_mesh.ebo_id);
+
 	LoadMesh(level_mesh, vertices, vertex_length, indices, index_length);
 }
 

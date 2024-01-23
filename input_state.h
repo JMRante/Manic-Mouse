@@ -4,8 +4,7 @@
 
 #include "game_math.h"
 
-struct InputState
-{
+struct InputState {
 	Vector2D mouse_direction_history[10];
 	Vector2D mouse_direction_smoothed;
 	Vector2D mouse_position;

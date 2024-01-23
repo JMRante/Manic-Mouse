@@ -7,8 +7,7 @@
 #include "assets.h"
 #include "game_state.h"
 
-class Renderer
-{
+class Renderer {
 public:
 	SDL_Window* window;
 	SDL_GLContext gl_context;

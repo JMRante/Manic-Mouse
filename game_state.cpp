@@ -78,7 +78,7 @@ LevelState::LevelState() {
     mouse.transform = Transform();
     mouse.transform.SetScale(mouse.sprites[0].size);
 
-    cheese.active = false;
+    cheese.active = true;
     cheese.sprite.size = { 32.0f, 32.0f };
     cheese.sprite.offset = { 96.0f, 0.0f };
     cheese.transform = Transform();

@@ -2,8 +2,7 @@
 #ifndef MANICMOUSE_GAME_MATH_H_
 #define MANICMOUSE_GAME_MATH_H_
 
-struct Vector2D
-{
+struct Vector2D {
 	float x;
 	float y;
 
@@ -17,6 +16,7 @@ struct Vector2D
 	Vector2D& operator-=(const Vector2D& vector_right);
 
 	float Length() const;
+	float LengthSquared() const;
 	static float Dot(const Vector2D& vector_left, const Vector2D& vector_right);
 	static float Angle(const Vector2D& vector_left, const Vector2D& vector_right);
 	static Vector2D Normalized(const Vector2D& vector);
@@ -26,8 +26,7 @@ struct Vector2D
 	static const Vector2D up;
 };
 
-struct Matrix4D
-{
+struct Matrix4D {
 	float data[16];
 
 	Matrix4D();
@@ -35,5 +34,8 @@ struct Matrix4D
 
 	friend Matrix4D operator*(const Matrix4D& matrix_left, const Matrix4D& matrix_right);
 };
+
+
+bool IsPointCollidingWithCircle(Vector2D point, Vector2D circle_origin, float circle_radius);
 
 #endif

@@ -44,6 +44,10 @@ float Vector2D::Length() const {
 	return sqrt(x * x + y * y);
 }
 
+float Vector2D::LengthSquared() const {
+	return x * x + y * y;
+}
+
 float Vector2D::Dot(const Vector2D& vector_left, const Vector2D& vector_right) {
 	return (vector_left.x * vector_right.x) + (vector_left.y * vector_right.y);
 }
@@ -133,4 +137,15 @@ Matrix4D operator*(const Matrix4D& matrix_left, const Matrix4D& matrix_right) {
 	result_matrix.data[15] = matrix_left.data[12] * matrix_right.data[3] + matrix_left.data[13] * matrix_right.data[7] + matrix_left.data[14] * matrix_right.data[11] + matrix_left.data[15] * matrix_right.data[15];
 
 	return result_matrix;
+}
+
+bool IsPointCollidingWithCircle(Vector2D point, Vector2D circle_origin, float circle_radius) {
+	Vector2D between = point - circle_origin;
+
+	if (between.LengthSquared() > circle_radius * circle_radius) {
+		return false;
+	}
+	else {
+		return true;
+	}
 }

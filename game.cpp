@@ -106,6 +106,7 @@ void Game::UpdateInputState(InputState& input_state) {
 
 void Game::UpdateGameState(GameState& game_state, InputState& input_state, float delta_time_seconds) {
 	Mouse& mouse = game_state.level.mouse;
+	Cheese& cheese = game_state.level.cheese;
 
 	mouse.transform.SetPosition({
 		input_state.mouse_position.x,
@@ -126,15 +127,25 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 	float angle = Vector2D::Angle(Vector2D::up * -1.0f, input_state.mouse_direction_smoothed);
 	angle = copysign(angle, input_state.mouse_direction_smoothed.x);
 	mouse.transform.SetRotationInRadians(angle);
+
+	if (IsPointCollidingWithCircle(mouse.transform.GetPosition(), cheese.transform.GetPosition(), 24.0f)) {
+		game_state.level_id = game_state.level_id < assets.levels.size() - 1 ? game_state.level_id + 1 : 0;
+		LoadLevel(game_state.level_id);
+	}
 }
 
 void Game::LoadLevel(int level_id) {
+	LevelState* level_to_load = assets.levels[level_id];
+
+	Cheese& cheese = game_state.level.cheese;
+	cheese.transform.SetPosition(level_to_load->cheese.transform.GetPosition());
+
 	Tilemap& tilemap = game_state.level.tilemap;
 	tilemap.active = true;
-	tilemap.tilesheet_index = assets.levels[level_id]->tilemap.tilesheet_index;
+	tilemap.tilesheet_index = level_to_load->tilemap.tilesheet_index;
 
 	for (int i = 0; i < 920; i++) {
-		tilemap.tiles[i] = assets.levels[level_id]->tilemap.tiles[i];
+		tilemap.tiles[i] = level_to_load->tilemap.tiles[i];
 	}
 
 	int tilemap_vertex_count = 5 * 4 * 920;
