@@ -165,7 +165,7 @@ bool IsContinuousPointCollidingWithTileArray(const Vector2D& previous_point, con
 		Vector2D point_to_check = current_point;
 
 		if (segment_count != 0) {
-			point_to_check = LerpVector2D(previous_point, current_point, i / ((float)segment_count * 32.0f));
+			point_to_check = LerpVector2D(previous_point, current_point, i / (float)segment_count);
 		}
 
 		int point_x_index = (int)floor(point_to_check.x / 32.0f);
