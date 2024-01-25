@@ -217,6 +217,40 @@ void Game::LoadLevel(int level_id) {
 	Cheese& cheese = game_state.level.cheese;
 	cheese.transform.SetPosition(level_to_load->cheese.transform.GetPosition());
 
+	Key& red_key = game_state.level.red_key;
+	red_key.active = level_to_load->red_key.active;
+	red_key.transform.SetPosition(level_to_load->red_key.transform.GetPosition());
+
+	Key& yellow_key = game_state.level.yellow_key;
+	yellow_key.active = level_to_load->yellow_key.active;
+	yellow_key.transform.SetPosition(level_to_load->yellow_key.transform.GetPosition());
+
+	Key& blue_key = game_state.level.blue_key;
+	blue_key.active = level_to_load->blue_key.active;
+	blue_key.transform.SetPosition(level_to_load->blue_key.transform.GetPosition());
+
+	Door& red_door = game_state.level.red_door;
+	red_door.active = level_to_load->red_door.active;
+	red_door.transform.SetPosition(level_to_load->red_door.transform.GetPosition());
+
+	Door& yellow_door = game_state.level.yellow_door;
+	yellow_door.active = level_to_load->yellow_door.active;
+	yellow_door.transform.SetPosition(level_to_load->yellow_door.transform.GetPosition());
+
+	Door& blue_door = game_state.level.blue_door;
+	blue_door.active = level_to_load->blue_door.active;
+	blue_door.transform.SetPosition(level_to_load->blue_door.transform.GetPosition());
+
+	game_state.level.moving_block_count = level_to_load->moving_block_count;
+
+	for (int i = 0; i < 20; i++) {
+		MovingBlock& moving_block = game_state.level.moving_blocks[i];
+		moving_block.active = i < game_state.level.moving_block_count;
+		moving_block.behavior = level_to_load->moving_blocks[i].behavior;
+		moving_block.transform.SetPosition(level_to_load->moving_blocks[i].transform.GetPosition());
+		moving_block.sprite.offset = moving_block.behavior == Vertical ? Vector2D(64.0f, 32.0f) : Vector2D(32.0f, 32.0f);
+	}
+
 	Tilemap& tilemap = game_state.level.tilemap;
 	tilemap.active = true;
 	tilemap.tilesheet_index = level_to_load->tilemap.tilesheet_index;

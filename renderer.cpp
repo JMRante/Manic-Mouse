@@ -116,7 +116,7 @@ void Renderer::Render(GameState& game_state, Assets& assets) {
 		RenderSprite(level.blue_door.sprite, level.blue_door.transform, assets);
 	}
 
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < level.moving_block_count; i++) {
 		if (level.moving_blocks[i].active) {
 			RenderSprite(level.moving_blocks[i].sprite, level.moving_blocks[i].transform, assets);
 		}
