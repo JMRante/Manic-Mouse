@@ -8,6 +8,7 @@ enum MetaMode {
 	Main_Menu,
 	GameplayStart,
 	Gameplay,
+	GameplayRestart,
 	GameplayWon
 };
 

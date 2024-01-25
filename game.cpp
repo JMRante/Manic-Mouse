@@ -66,14 +66,14 @@ void Game::UpdateInputState(InputState& input_state) {
 
 	input_state.mouse_speed = 0.0f;
 
+	input_state.mouse_left_pressed = false;
+
 	while (SDL_PollEvent(&event) != 0) {
 		switch (event.type) {
 		case SDL_QUIT:
 			input_state.window_closed = true;
 			break;
 		case SDL_MOUSEBUTTONDOWN:
-			input_state.mouse_left_pressed = false;
-
 			if (event.button.button == SDL_BUTTON_LEFT) {
 				input_state.mouse_left_pressed = true;
 			}
@@ -168,6 +168,17 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 				mouse.transform.SetPosition(wall_collision_point);
 			}
 		}
+	} else {
+		if (game_state.mode == Gameplay) {
+			game_state.mode = GameplayRestart;
+
+			transitions.active = true;
+			transitions.timer = 0.0f;
+			transitions.focus_point = mouse.transform.GetPosition();
+			transitions.radius_start = transitions.radius_goal;
+			transitions.radius_goal = 0.0f;
+			transitions.transition_time = 0.3f;
+		}
 	}
 
 	if (transitions.active) {
@@ -184,6 +195,10 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 					LoadLevel(game_state.level_id);
 
 					game_state.mode = GameplayStart;
+				} else if (game_state.mode == GameplayRestart) {
+					LoadLevel(game_state.level_id);
+
+					game_state.mode = GameplayStart;
 				}
 			}
 		}
@@ -196,6 +211,8 @@ void Game::LoadLevel(int level_id) {
 	LevelState* level_to_load = assets.levels[level_id];
 
 	game_state.level.start = level_to_load->start;
+
+	game_state.level.mouse.is_dead = false;
 
 	Cheese& cheese = game_state.level.cheese;
 	cheese.transform.SetPosition(level_to_load->cheese.transform.GetPosition());
