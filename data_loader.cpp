@@ -121,56 +121,56 @@ void DataLoader::LoadLevels(const std::string& levels_file_path, std::vector<Lev
 			switch (parser_state) {
 			case ParseStart:
 				switch (property_counter) {
-				case 0: level->start.x = std::stof(line); property_counter++; break;
-				case 1: level->start.y = std::stof(line); property_counter = 0; parser_state = ParseCheese; break;
+				case 0: level->start.x = std::stof(line) + 16.0f; property_counter++; break;
+				case 1: level->start.y = std::stof(line) - 16.0f; property_counter = 0; parser_state = ParseCheese; break;
 				}
 				break;
 			case ParseCheese:
 				switch (property_counter) {
-				case 0: level->cheese.transform.SetPositionX(std::stof(line)); property_counter++; break;
-				case 1: level->cheese.transform.SetPositionY(std::stof(line)); property_counter = 0; parser_state = ParseRedKey; break;
+				case 0: level->cheese.transform.SetPositionX(std::stof(line) + 16.0f); property_counter++; break;
+				case 1: level->cheese.transform.SetPositionY(std::stof(line) - 16.0f); property_counter = 0; parser_state = ParseRedKey; break;
 				}
 				break;
 			case ParseRedKey:
 				switch (property_counter) {
 				case 0: level->red_key.active = (bool)std::stoi(line); property_counter++; break;
-				case 1: level->red_key.transform.SetPositionX(std::stof(line)); property_counter++; break;
-				case 2: level->red_key.transform.SetPositionY(std::stof(line)); property_counter = 0; parser_state = ParseYellowKey; break;
+				case 1: level->red_key.transform.SetPositionX(std::stof(line) + 16.0f); property_counter++; break;
+				case 2: level->red_key.transform.SetPositionY(std::stof(line) - 16.0f); property_counter = 0; parser_state = ParseYellowKey; break;
 				}
 				break;
 			case ParseYellowKey:
 				switch (property_counter) {
 				case 0: level->yellow_key.active = (bool)std::stoi(line); property_counter++; break;
-				case 1: level->yellow_key.transform.SetPositionX(std::stof(line)); property_counter++; break;
-				case 2: level->yellow_key.transform.SetPositionY(std::stof(line)); property_counter = 0; parser_state = ParseBlueKey; break;
+				case 1: level->yellow_key.transform.SetPositionX(std::stof(line) + 16.0f); property_counter++; break;
+				case 2: level->yellow_key.transform.SetPositionY(std::stof(line) - 16.0f); property_counter = 0; parser_state = ParseBlueKey; break;
 				}
 				break;
 			case ParseBlueKey:
 				switch (property_counter) {
 				case 0: level->blue_key.active = (bool)std::stoi(line); property_counter++; break;
-				case 1: level->blue_key.transform.SetPositionX(std::stof(line)); property_counter++; break;
-				case 2: level->blue_key.transform.SetPositionY(std::stof(line)); property_counter = 0; parser_state = ParseRedDoor; break;
+				case 1: level->blue_key.transform.SetPositionX(std::stof(line) + 16.0f); property_counter++; break;
+				case 2: level->blue_key.transform.SetPositionY(std::stof(line) - 16.0f); property_counter = 0; parser_state = ParseRedDoor; break;
 				}
 				break;
 			case ParseRedDoor:
 				switch (property_counter) {
 				case 0: level->red_door.active = (bool)std::stoi(line); property_counter++; break;
-				case 1: level->red_door.transform.SetPositionX(std::stof(line)); property_counter++; break;
-				case 2: level->red_door.transform.SetPositionY(std::stof(line)); property_counter = 0; parser_state = ParseYellowDoor; break;
+				case 1: level->red_door.transform.SetPositionX(std::stof(line) + 16.0f); property_counter++; break;
+				case 2: level->red_door.transform.SetPositionY(std::stof(line) - 16.0f); property_counter = 0; parser_state = ParseYellowDoor; break;
 				}
 				break;
 			case ParseYellowDoor:
 				switch (property_counter) {
 				case 0: level->yellow_door.active = (bool)std::stoi(line); property_counter++; break;
-				case 1: level->yellow_door.transform.SetPositionX(std::stof(line)); property_counter++; break;
-				case 2: level->yellow_door.transform.SetPositionY(std::stof(line)); property_counter = 0; parser_state = ParseBlueDoor; break;
+				case 1: level->yellow_door.transform.SetPositionX(std::stof(line) + 16.0f); property_counter++; break;
+				case 2: level->yellow_door.transform.SetPositionY(std::stof(line) - 16.0f); property_counter = 0; parser_state = ParseBlueDoor; break;
 				}
 				break;
 			case ParseBlueDoor:
 				switch (property_counter) {
 				case 0: level->blue_door.active = (bool)std::stoi(line); property_counter++; break;
-				case 1: level->blue_door.transform.SetPositionX(std::stof(line)); property_counter++; break;
-				case 2: level->blue_door.transform.SetPositionY(std::stof(line)); property_counter = 0; parser_state = ParseMovingBlocksCount; break;
+				case 1: level->blue_door.transform.SetPositionX(std::stof(line) + 16.0f); property_counter++; break;
+				case 2: level->blue_door.transform.SetPositionY(std::stof(line) - 16.0f); property_counter = 0; parser_state = ParseMovingBlocksCount; break;
 				}
 				break;
 			case ParseMovingBlocksCount:
@@ -182,8 +182,8 @@ void DataLoader::LoadLevels(const std::string& levels_file_path, std::vector<Lev
 					MovingBlock& moving_block = level->moving_blocks[object_counter];
 					switch (property_counter) {
 						case 0: moving_block.behavior = (MovingBlockBehavior)std::stoi(line); property_counter++; break;
-						case 1: moving_block.transform.SetPositionX(std::stof(line)); property_counter++; break;
-						case 2: moving_block.transform.SetPositionY(std::stof(line)); property_counter = 0; object_counter++;  break;
+						case 1: moving_block.transform.SetPositionX(std::stof(line) + 16.0f); property_counter++; break;
+						case 2: moving_block.transform.SetPositionY(std::stof(line) - 16.0f); property_counter = 0; object_counter++;  break;
 					}
 					break;
 				} else {
