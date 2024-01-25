@@ -7,6 +7,7 @@
 void Assets::Load() {
 	sprite_shader_program = DataLoader::LoadShader("Assets/Shaders/sprite_shader.vert", "Assets/Shaders/sprite_shader.frag");
 	tilemap_shader_program = DataLoader::LoadShader("Assets/Shaders/tilemap_shader.vert", "Assets/Shaders/sprite_shader.frag");
+	transition_shader_program = DataLoader::LoadShader("Assets/Shaders/tilemap_shader.vert", "Assets/Shaders/transition_shader.frag");
 	sprite_sheet = DataLoader::LoadPNG("Assets/mm_sprites.png");
 
 	tile_sheets[0] = DataLoader::LoadPNG("Assets/mm_tileset1.png");
@@ -30,6 +31,10 @@ void Assets::Unload() {
 	glDeleteProgram(tilemap_shader_program.id);
 	glDeleteShader(tilemap_shader_program.vertex_shader_id);
 	glDeleteShader(tilemap_shader_program.fragment_shader_id);
+
+	glDeleteProgram(transition_shader_program.id);
+	glDeleteShader(transition_shader_program.vertex_shader_id);
+	glDeleteShader(transition_shader_program.fragment_shader_id);
 
 	glDeleteVertexArrays(1, &quad_mesh.vao_id);
 	glDeleteBuffers(1, &quad_mesh.vbo_id);

@@ -6,7 +6,9 @@
 
 enum MetaMode {
 	Main_Menu,
-	Gameplay
+	GameplayStart,
+	Gameplay,
+	GameplayWon
 };
 
 enum KeyColor {
@@ -48,10 +50,11 @@ struct Sprite {
 struct Mouse {
 	bool active;
 	Transform transform;
-	Sprite sprites[4];
+	Sprite sprites[5];
 	int sprite_index;
 	float sprite_timer;
 	float sprite_speed;
+	bool is_dead;
 };
 
 struct Cheese {
@@ -91,6 +94,16 @@ struct Tilemap {
 	bool IsPointInWall(const Vector2D point);
 };
 
+struct Transitions {
+	bool active;
+	Vector2D focus_point;
+	float radius;
+	float radius_start;
+	float radius_goal;
+	float transition_time;
+	float timer;
+};
+
 // Player
 // Cheese
 // 3 Keys
@@ -118,6 +131,7 @@ struct GameState {
 	MetaMode mode;
 	int level_id;
 	LevelState level;
+	Transitions transitions;
 };
 
 #endif

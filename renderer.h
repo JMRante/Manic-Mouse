@@ -17,6 +17,9 @@ public:
 
 	Matrix4D view_matrix;
 
+	Matrix4D tilemap_transform_matrix;
+	Matrix4D transition_transform_matrix;
+
 	bool Load();
 	void Unload();
 

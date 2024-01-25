@@ -73,10 +73,13 @@ LevelState::LevelState() {
     mouse.sprites[1].offset = { 32.0f, 0.0f };
     mouse.sprites[2].size = { 32.0f, 32.0f };
     mouse.sprites[2].offset = { 64.0f, 0.0f };
+    mouse.sprites[3].size = { 32.0f, 32.0f };
+    mouse.sprites[3].offset = { 0.0f, 32.0f };
     mouse.sprite_index = 0;
     mouse.sprite_speed = 0.12f;
     mouse.transform = Transform();
     mouse.transform.SetScale(mouse.sprites[0].size);
+    mouse.is_dead = false;
 
     cheese.active = true;
     cheese.sprite.size = { 32.0f, 32.0f };

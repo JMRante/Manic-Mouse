@@ -1,4 +1,4 @@
-#version 460
+#version 330
 
 uniform mat4 transform_view;
 

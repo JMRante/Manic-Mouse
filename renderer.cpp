@@ -10,8 +10,8 @@
 bool Renderer::Load() {
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
@@ -40,9 +40,17 @@ bool Renderer::Load() {
 	}
 
 	view_matrix = Matrix4D(
-		{ -1.0f, 1.0f }, 
-		0.0f, 
+		{ -1.0f, 1.0f },
+		0.0f,
 		{ 2.0f / (float)window_width, 2.0f / (float)window_height }
+	);
+
+	tilemap_transform_matrix = Matrix4D();
+
+	transition_transform_matrix = Matrix4D(
+		{ 0.0f, 0.0f },
+		0.0f,
+		{ 2.0f * (float)window_width, 2.0f * (float)window_height }
 	);
 
 	return true;
@@ -69,9 +77,7 @@ void Renderer::Render(GameState& game_state, Assets& assets) {
 		glBindTexture(GL_TEXTURE_2D, assets.tile_sheets[level.tilemap.tilesheet_index].id);
 
 		GLint tilemap_transform_view_uniform_id = glGetUniformLocation(assets.tilemap_shader_program.id, "transform_view");
-		Transform tile_transform = Transform();
-		tile_transform.SetPosition({ 0.0f, 0.0f });
-		Matrix4D tilemap_transform_view = tile_transform.GetTransformMatrix() * view_matrix;
+		Matrix4D tilemap_transform_view = tilemap_transform_matrix * view_matrix;
 		glUniformMatrix4fv(tilemap_transform_view_uniform_id, 1, GL_TRUE, tilemap_transform_view.data);
 
 		glDrawElements(GL_TRIANGLES, 6 * 920, GL_UNSIGNED_INT, 0);
@@ -81,10 +87,6 @@ void Renderer::Render(GameState& game_state, Assets& assets) {
 	glUseProgram(assets.sprite_shader_program.id);
 	glBindVertexArray(assets.quad_mesh.vao_id);
 	glBindTexture(GL_TEXTURE_2D, assets.sprite_sheet.id);
-
-	if (level.mouse.active) {
-		RenderSprite(level.mouse.sprites[level.mouse.sprite_index], level.mouse.transform, assets);
-	}
 
 	if (level.cheese.active) {
 		RenderSprite(level.cheese.sprite, level.cheese.transform, assets);
@@ -118,6 +120,23 @@ void Renderer::Render(GameState& game_state, Assets& assets) {
 		if (level.moving_blocks[i].active) {
 			RenderSprite(level.moving_blocks[i].sprite, level.moving_blocks[i].transform, assets);
 		}
+	}
+
+	// Transitions
+	glUseProgram(assets.transition_shader_program.id);
+	GLint focus_point_uniform_id = glGetUniformLocation(assets.transition_shader_program.id, "focus_point");
+	glUniform2f(focus_point_uniform_id, game_state.transitions.focus_point.x, (float)window_height - game_state.transitions.focus_point.y);
+	GLint timer_uniform_id = glGetUniformLocation(assets.transition_shader_program.id, "focus_radius");
+	glUniform1f(timer_uniform_id, game_state.transitions.radius);
+	GLint transition_transform_view_uniform_id = glGetUniformLocation(assets.transition_shader_program.id, "transform_view");
+	Matrix4D transition_transform_view = transition_transform_matrix * view_matrix;
+	glUniformMatrix4fv(transition_transform_view_uniform_id, 1, GL_TRUE, transition_transform_view.data);
+	glDrawElements(GL_TRIANGLES, 6 * 920, GL_UNSIGNED_INT, 0);
+
+	glUseProgram(assets.sprite_shader_program.id);
+
+	if (level.mouse.active) {
+		RenderSprite(level.mouse.sprites[level.mouse.sprite_index], level.mouse.transform, assets);
 	}
 
 	SDL_GL_SwapWindow(window);

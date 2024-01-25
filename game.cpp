@@ -21,7 +21,7 @@ bool Game::Start() {
 
 	assets.Load();
 
-	game_state.mode = Gameplay;
+	game_state.mode = GameplayStart;
 	game_state.level_id = 0;
 
 	LoadLevel(game_state.level_id);
@@ -71,6 +71,13 @@ void Game::UpdateInputState(InputState& input_state) {
 		case SDL_QUIT:
 			input_state.window_closed = true;
 			break;
+		case SDL_MOUSEBUTTONDOWN:
+			input_state.mouse_left_pressed = false;
+
+			if (event.button.button == SDL_BUTTON_LEFT) {
+				input_state.mouse_left_pressed = true;
+			}
+			break;
 		case SDL_MOUSEMOTION:
 			Vector2D next_mouse_position = { (float)event.motion.x, (float)event.motion.y };
 			Vector2D mouse_direction = has_sampled_mouse_position ? next_mouse_position - input_state.mouse_position : Vector2D(1.0f, 0.0f);
@@ -108,47 +115,87 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 	Mouse& mouse = game_state.level.mouse;
 	Cheese& cheese = game_state.level.cheese;
 
-	Vector2D mouse_last_position = mouse.transform.GetPosition();
+	Transitions& transitions = game_state.transitions;
 
-	mouse.transform.SetPosition({
-		input_state.mouse_position.x,
-		input_state.mouse_position.y
-	});
+	if (!mouse.is_dead) {
+		Vector2D mouse_last_position = mouse.transform.GetPosition();
 
-	mouse.sprite_timer += input_state.mouse_speed * delta_time_seconds;
-	
-	if (mouse.sprite_timer >= mouse.sprite_speed) {
-		mouse.sprite_timer -= mouse.sprite_speed;
-		mouse.sprite_index++;
+		mouse.transform.SetPosition({
+			input_state.mouse_position.x,
+			input_state.mouse_position.y
+			});
 
-		if (mouse.sprite_index >= 3) {
-			mouse.sprite_index = 0;
+		mouse.sprite_timer += input_state.mouse_speed * delta_time_seconds;
+
+		if (mouse.sprite_timer >= mouse.sprite_speed) {
+			mouse.sprite_timer -= mouse.sprite_speed;
+			mouse.sprite_index++;
+
+			if (mouse.sprite_index >= 3) {
+				mouse.sprite_index = 0;
+			}
+		}
+
+		float angle = Vector2D::Angle(Vector2D::up * -1.0f, input_state.mouse_direction_smoothed);
+		angle = copysign(angle, input_state.mouse_direction_smoothed.x);
+		mouse.transform.SetRotationInRadians(angle);
+
+		if (game_state.mode == GameplayStart) {
+			if (IsPointCollidingWithCircle(mouse.transform.GetPosition(), game_state.level.start, 24.0f)) {
+				game_state.mode = Gameplay;
+
+				transitions.timer = 0.0f;
+				transitions.radius_start = transitions.radius_goal;
+				transitions.radius_goal = 2000.0f;
+				transitions.transition_time = 0.3f;
+			}
+		} else if (game_state.mode == Gameplay) {
+			if (IsPointCollidingWithCircle(mouse.transform.GetPosition(), cheese.transform.GetPosition(), 24.0f)) {
+				game_state.mode = GameplayWon;
+
+				transitions.active = true;
+				transitions.timer = 0.0f;
+				transitions.focus_point = cheese.transform.GetPosition();
+				transitions.radius_start = transitions.radius_goal;
+				transitions.radius_goal = 0.0f;
+				transitions.transition_time = 0.3f;
+			}
+
+			Vector2D wall_collision_point;
+			if (IsContinuousPointCollidingWithTileArray(mouse_last_position, mouse.transform.GetPosition(), wall_collision_point, game_state.level.tilemap.tiles)) {
+				mouse.is_dead = true;
+				mouse.sprite_index = 3;
+				mouse.transform.SetPosition(wall_collision_point);
+			}
 		}
 	}
 
-	float angle = Vector2D::Angle(Vector2D::up * -1.0f, input_state.mouse_direction_smoothed);
-	angle = copysign(angle, input_state.mouse_direction_smoothed.x);
-	mouse.transform.SetRotationInRadians(angle);
+	if (transitions.active) {
+		if (transitions.timer <= transitions.transition_time) {
+			transitions.timer += delta_time_seconds;
 
-	if (IsPointCollidingWithCircle(mouse.transform.GetPosition(), cheese.transform.GetPosition(), 24.0f)) {
-		game_state.level_id = game_state.level_id < assets.levels.size() - 1 ? game_state.level_id + 1 : 0;
-		LoadLevel(game_state.level_id);
-	}
+			if (transitions.timer > transitions.transition_time) {
+				transitions.timer = transitions.transition_time;
 
-	Vector2D wall_collision_point;
-	if (IsContinuousPointCollidingWithTileArray(mouse_last_position, mouse.transform.GetPosition(), wall_collision_point, game_state.level.tilemap.tiles)) {
-		mouse.sprites[0].offset = { 0.0f, 64.0f };
-		mouse.sprites[1].offset = { 0.0f, 64.0f };
-		mouse.sprites[2].offset = { 0.0f, 64.0f };
-	} else {
-		mouse.sprites[0].offset = { 0.0f, 0.0f };
-		mouse.sprites[1].offset = { 32.0f, 0.0f };
-		mouse.sprites[2].offset = { 64.0f, 0.0f };
+				if (game_state.mode == Gameplay) {
+					transitions.active = false;
+				} else if (game_state.mode == GameplayWon) {
+					game_state.level_id = game_state.level_id < assets.levels.size() - 1 ? game_state.level_id + 1 : 0;
+					LoadLevel(game_state.level_id);
+
+					game_state.mode = GameplayStart;
+				}
+			}
+		}
+
+		transitions.radius = Lerp(transitions.radius_start, transitions.radius_goal, transitions.timer / transitions.transition_time);
 	}
 }
 
 void Game::LoadLevel(int level_id) {
 	LevelState* level_to_load = assets.levels[level_id];
+
+	game_state.level.start = level_to_load->start;
 
 	Cheese& cheese = game_state.level.cheese;
 	cheese.transform.SetPosition(level_to_load->cheese.transform.GetPosition());
@@ -205,4 +252,12 @@ void Game::LoadLevel(int level_id) {
 
 	delete[] vertices;
 	delete[] indices;
+
+	Transitions& transitions = game_state.transitions;
+	transitions.active = true;
+	transitions.focus_point = level_to_load->start;
+	transitions.timer = 0.0f;
+	transitions.radius_start = 0.0f;
+	transitions.radius_goal = 48.0f;
+	transitions.transition_time = 0.3f;
 }
