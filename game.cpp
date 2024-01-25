@@ -162,7 +162,7 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 			}
 
 			Vector2D wall_collision_point;
-			if (IsContinuousPointCollidingWithTileArray(mouse_last_position, mouse.transform.GetPosition(), wall_collision_point, game_state.level.tilemap.tiles)) {
+			if (IsContinuousPointCollidingWithTileArray(mouse_last_position, mouse.transform.GetPosition(), game_state.level.tilemap.tiles, wall_collision_point)) {
 				mouse.is_dead = true;
 				mouse.sprite_index = 3;
 				mouse.transform.SetPosition(wall_collision_point);
