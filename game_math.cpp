@@ -157,7 +157,7 @@ bool IsPointCollidingWithCircle(const Vector2D& point, const Vector2D& circle_or
 	}
 }
 
-bool IsContinuousPointCollidingWithTileArray(const Vector2D& previous_point, const Vector2D& current_point, Vector2D& collision_point, unsigned char* tile_data) {
+bool IsContinuousPointCollidingWithTileArray(const Vector2D& previous_point, const Vector2D& current_point, unsigned char* tile_data, Vector2D& collision_point) {
 	Vector2D path = current_point - previous_point;
 	int segment_count = (int)ceil(path.Length() / 32.0f);
 
@@ -173,6 +173,36 @@ bool IsContinuousPointCollidingWithTileArray(const Vector2D& previous_point, con
 		int tile_index = point_x_index + (point_y_index * 40);
 
 		if (tile_data[tile_index] == 1) {
+			collision_point = point_to_check;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool IsPointCollidingWithAABB(const Vector2D& point, const Vector2D& aabb_origin, const Vector2D& aabb_half_extents) {
+	float x1 = aabb_origin.x - aabb_half_extents.x;
+	float x2 = aabb_origin.x + aabb_half_extents.x;
+
+	float y1 = aabb_origin.y - aabb_half_extents.y;
+	float y2 = aabb_origin.y + aabb_half_extents.y;
+
+	return point.x > x1 && point.x < x2 && point.y > y1 && point.y < y2;
+}
+
+bool IsContinuousPointCollidingWithAABB(const Vector2D& previous_point, const Vector2D& current_point, const Vector2D& aabb_origin, const Vector2D& aabb_half_extents, Vector2D& collision_point) {
+	Vector2D path = current_point - previous_point;
+	int segment_count = (int)ceil(path.Length() / 32.0f);
+
+	for (int i = 0; i <= segment_count; i++) {
+		Vector2D point_to_check = current_point;
+
+		if (segment_count != 0) {
+			point_to_check = LerpVector2D(previous_point, current_point, i / (float)segment_count);
+		}
+
+		if (IsPointCollidingWithAABB(point_to_check, aabb_origin, aabb_half_extents)) {
 			collision_point = point_to_check;
 			return true;
 		}
