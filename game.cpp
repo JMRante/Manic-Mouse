@@ -115,6 +115,14 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 	Mouse& mouse = game_state.level.mouse;
 	Cheese& cheese = game_state.level.cheese;
 
+	Key& red_key = game_state.level.red_key;
+	Key& yellow_key = game_state.level.yellow_key;
+	Key& blue_key = game_state.level.blue_key;
+
+	Door& red_door = game_state.level.red_door;
+	Door& yellow_door = game_state.level.yellow_door;
+	Door& blue_door = game_state.level.blue_door;
+
 	Transitions& transitions = game_state.transitions;
 
 	if (!mouse.is_dead) {
@@ -166,6 +174,51 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 				mouse.is_dead = true;
 				mouse.sprite_index = 3;
 				mouse.transform.SetPosition(wall_collision_point);
+			}
+
+			if (red_key.active && IsPointCollidingWithCircle(mouse.transform.GetPosition(), red_key.transform.GetPosition(), 24.0f)) {
+				red_key.collected = true;
+				red_key.transform.SetPosition({ 32.0f, renderer.window_height - 32.0f });
+			}
+
+			if (yellow_key.active && IsPointCollidingWithCircle(mouse.transform.GetPosition(), yellow_key.transform.GetPosition(), 24.0f)) {
+				yellow_key.collected = true;
+				yellow_key.transform.SetPosition({ 80.0f, renderer.window_height - 32.0f });
+			}
+
+			if (blue_key.active && IsPointCollidingWithCircle(mouse.transform.GetPosition(), blue_key.transform.GetPosition(), 24.0f)) {
+				blue_key.collected = true;
+				blue_key.transform.SetPosition({ 128.0f, renderer.window_height - 32.0f });
+			}
+
+			if (red_door.active && IsContinuousPointCollidingWithAABB(mouse_last_position, mouse.transform.GetPosition(), red_door.transform.GetPosition(), { 16.0f, 16.0f }, wall_collision_point)) {
+				if (red_key.collected) {
+					red_door.active = false;
+				} else {
+					mouse.is_dead = true;
+					mouse.sprite_index = 3;
+					mouse.transform.SetPosition(wall_collision_point);
+				}
+			}
+
+			if (yellow_door.active && IsContinuousPointCollidingWithAABB(mouse_last_position, mouse.transform.GetPosition(), yellow_door.transform.GetPosition(), { 16.0f, 16.0f }, wall_collision_point)) {
+				if (yellow_key.collected) {
+					yellow_door.active = false;
+				} else {
+					mouse.is_dead = true;
+					mouse.sprite_index = 3;
+					mouse.transform.SetPosition(wall_collision_point);
+				}
+			}
+
+			if (blue_door.active && IsContinuousPointCollidingWithAABB(mouse_last_position, mouse.transform.GetPosition(), blue_door.transform.GetPosition(), { 16.0f, 16.0f }, wall_collision_point)) {
+				if (blue_key.collected) {
+					blue_door.active = false;
+				} else {
+					mouse.is_dead = true;
+					mouse.sprite_index = 3;
+					mouse.transform.SetPosition(wall_collision_point);
+				}
 			}
 		}
 	} else {
@@ -220,14 +273,17 @@ void Game::LoadLevel(int level_id) {
 	Key& red_key = game_state.level.red_key;
 	red_key.active = level_to_load->red_key.active;
 	red_key.transform.SetPosition(level_to_load->red_key.transform.GetPosition());
+	red_key.collected = false;
 
 	Key& yellow_key = game_state.level.yellow_key;
 	yellow_key.active = level_to_load->yellow_key.active;
 	yellow_key.transform.SetPosition(level_to_load->yellow_key.transform.GetPosition());
+	yellow_key.collected = false;
 
 	Key& blue_key = game_state.level.blue_key;
 	blue_key.active = level_to_load->blue_key.active;
 	blue_key.transform.SetPosition(level_to_load->blue_key.transform.GetPosition());
+	blue_key.collected = false;
 
 	Door& red_door = game_state.level.red_door;
 	red_door.active = level_to_load->red_door.active;

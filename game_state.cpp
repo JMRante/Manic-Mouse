@@ -93,6 +93,7 @@ LevelState::LevelState() {
     red_key.transform = Transform();
     red_key.transform.SetScale(red_key.sprite.size);
     red_key.color = Red;
+    red_key.collected = false;
 
     yellow_key.active = false;
     yellow_key.sprite.size = { 32.0f, 32.0f };
@@ -100,6 +101,7 @@ LevelState::LevelState() {
     yellow_key.transform = Transform();
     yellow_key.transform.SetScale(yellow_key.sprite.size);
     yellow_key.color = Yellow;
+    yellow_key.collected = false;
 
     blue_key.active = false;
     blue_key.sprite.size = { 32.0f, 32.0f };
@@ -107,6 +109,7 @@ LevelState::LevelState() {
     blue_key.transform = Transform();
     blue_key.transform.SetScale(blue_key.sprite.size);
     blue_key.color = Blue;
+    blue_key.collected = false;
 
     red_door.active = false;
     red_door.sprite.size = { 32.0f, 32.0f };

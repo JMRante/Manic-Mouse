@@ -69,6 +69,7 @@ struct Key {
 	KeyColor color;
 	Transform transform;
 	Sprite sprite;
+	bool collected;
 };
 
 struct Door {
@@ -105,12 +106,6 @@ struct Transitions {
 	float timer;
 };
 
-// Player
-// Cheese
-// 3 Keys
-// 3 Doors
-// 20 Moving Blocks
-// Tilemap
 struct LevelState {
 	LevelState();
 
