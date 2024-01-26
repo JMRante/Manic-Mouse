@@ -9,6 +9,7 @@
 #include "renderer.h"
 
 enum LevelParserState {
+	ParseTimeLimit,
 	ParseStart,
 	ParseCheese,
 	ParseRedKey,

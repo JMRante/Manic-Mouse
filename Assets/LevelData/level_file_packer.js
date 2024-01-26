@@ -44,6 +44,9 @@ fs.readdir('./', (err, files) => {
         return 1
       }})
     
+    let timeLimit = fileData.properties.find(x => x.name == 'time_limit').value;
+    levelData.timeLimit = timeLimit;
+
     let objectList = fileData.layers.find(x => x.name == 'objects').objects
 
     levelData.movingBlocks = []
@@ -104,6 +107,7 @@ fs.readdir('./', (err, files) => {
 
     let levelDataString = ''
 
+    levelDataString += levelData.timeLimit + '\n'
     levelDataString += levelData.start.x + '\n'
     levelDataString += levelData.start.y + '\n'
     levelDataString += levelData.cheese.x + '\n'

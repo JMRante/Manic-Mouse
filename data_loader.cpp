@@ -112,13 +112,17 @@ void DataLoader::LoadLevels(const std::string& levels_file_path, std::vector<Lev
 
 	if (file_input_stream.is_open()) {
 		std::string line;
-		LevelParserState parser_state = ParseStart;
+		LevelParserState parser_state = ParseTimeLimit;
 		int object_counter = 0;
 		int property_counter = 0;
 		LevelState* level = new LevelState();
 
 		while (std::getline(file_input_stream, line)) {
 			switch (parser_state) {
+			case ParseTimeLimit:
+				level->time_limit = std::stof(line);
+				parser_state = ParseStart;
+				break;
 			case ParseStart:
 				switch (property_counter) {
 				case 0: level->start.x = std::stof(line) + 16.0f; property_counter++; break;
@@ -204,7 +208,7 @@ void DataLoader::LoadLevels(const std::string& levels_file_path, std::vector<Lev
 				levels.push_back(level);
 				level = new LevelState();
 
-				parser_state = ParseStart;
+				parser_state = ParseTimeLimit;
 			}
 		}
 	}

@@ -218,6 +218,12 @@
  "nextlayerid":7,
  "nextobjectid":27,
  "orientation":"orthogonal",
+ "properties":[
+        {
+         "name":"time_limit",
+         "type":"int",
+         "value":20
+        }],
  "renderorder":"right-down",
  "tiledversion":"1.10.2",
  "tileheight":32,

@@ -114,6 +114,7 @@ struct Transitions {
 struct LevelState {
 	LevelState();
 
+	float time_limit;
 	Vector2D start;
 	Mouse mouse;
 	Cheese cheese;
