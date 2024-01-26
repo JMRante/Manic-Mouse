@@ -220,6 +220,32 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 					mouse.transform.SetPosition(wall_collision_point);
 				}
 			}
+
+			for (int i = 0; i < game_state.level.moving_block_count; i++) {
+				MovingBlock& moving_block = game_state.level.moving_blocks[i];
+
+				if (moving_block.behavior == Horizontal) {
+					if ((moving_block.speed > 0 && IsPointCollidingWithTileArray(moving_block.transform.GetPosition() + Vector2D(16.0f, 0.0f), game_state.level.tilemap.tiles))
+						|| (moving_block.speed < 0 && IsPointCollidingWithTileArray(moving_block.transform.GetPosition() + Vector2D(-16.0f, 0.0f), game_state.level.tilemap.tiles))) {
+						moving_block.speed *= -1.0f;
+					}
+
+					moving_block.transform.SetPositionX(moving_block.transform.GetPosition().x + (moving_block.speed * delta_time_seconds));
+				} else {
+					if ((moving_block.speed > 0 && IsPointCollidingWithTileArray(moving_block.transform.GetPosition() + Vector2D(0.0f, 16.0f), game_state.level.tilemap.tiles))
+						|| (moving_block.speed < 0 && IsPointCollidingWithTileArray(moving_block.transform.GetPosition() + Vector2D(0.0f, -16.0f), game_state.level.tilemap.tiles))) {
+						moving_block.speed *= -1.0f;
+					}
+
+					moving_block.transform.SetPositionY(moving_block.transform.GetPosition().y + (moving_block.speed * delta_time_seconds));
+				}
+
+				if (IsContinuousPointCollidingWithAABB(mouse_last_position, mouse.transform.GetPosition(), moving_block.transform.GetPosition(), { 16.0f, 16.0f }, wall_collision_point)) {
+					mouse.is_dead = true;
+					mouse.sprite_index = 3;
+					mouse.transform.SetPosition(wall_collision_point);
+				}
+			}
 		}
 	} else {
 		if (game_state.mode == Gameplay) {
@@ -305,6 +331,7 @@ void Game::LoadLevel(int level_id) {
 		moving_block.behavior = level_to_load->moving_blocks[i].behavior;
 		moving_block.transform.SetPosition(level_to_load->moving_blocks[i].transform.GetPosition());
 		moving_block.sprite.offset = moving_block.behavior == Vertical ? Vector2D(64.0f, 32.0f) : Vector2D(32.0f, 32.0f);
+		moving_block.speed = 64.0f;
 	}
 
 	Tilemap& tilemap = game_state.level.tilemap;

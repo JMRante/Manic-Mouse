@@ -84,6 +84,7 @@ struct MovingBlock {
 	MovingBlockBehavior behavior;
 	Transform transform;
 	Sprite sprite;
+	float speed;
 };
 
 struct Tilemap {

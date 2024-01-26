@@ -39,6 +39,7 @@ float Lerp(float start, float end, float t);
 Vector2D LerpVector2D(const Vector2D& start, const Vector2D& end, float t);
 
 bool IsPointCollidingWithCircle(const Vector2D& point, const Vector2D& circle_origin, float circle_radius);
+bool IsPointCollidingWithTileArray(const Vector2D& point, unsigned char* tile_data);
 bool IsContinuousPointCollidingWithTileArray(const Vector2D& previous_point, const Vector2D& current_point, unsigned char* tile_data, Vector2D& collision_point);
 bool IsPointCollidingWithAABB(const Vector2D& point, const Vector2D& aabb_origin, const Vector2D& aabb_half_extents);
 bool IsContinuousPointCollidingWithAABB(const Vector2D& previous_point, const Vector2D& current_point, const Vector2D& aabb_origin, const Vector2D& aabb_half_extents, Vector2D& collision_point);

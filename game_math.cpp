@@ -157,6 +157,18 @@ bool IsPointCollidingWithCircle(const Vector2D& point, const Vector2D& circle_or
 	}
 }
 
+bool IsPointCollidingWithTileArray(const Vector2D& point, unsigned char* tile_data) {
+	int point_x_index = (int)floor(point.x / 32.0f);
+	int point_y_index = (int)floor(point.y / 32.0f);
+	int tile_index = point_x_index + (point_y_index * 40);
+
+	if (tile_data[tile_index] == 1) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 bool IsContinuousPointCollidingWithTileArray(const Vector2D& previous_point, const Vector2D& current_point, unsigned char* tile_data, Vector2D& collision_point) {
 	Vector2D path = current_point - previous_point;
 	int segment_count = (int)ceil(path.Length() / 32.0f);
@@ -168,11 +180,7 @@ bool IsContinuousPointCollidingWithTileArray(const Vector2D& previous_point, con
 			point_to_check = LerpVector2D(previous_point, current_point, i / (float)segment_count);
 		}
 
-		int point_x_index = (int)floor(point_to_check.x / 32.0f);
-		int point_y_index = (int)floor(point_to_check.y / 32.0f);
-		int tile_index = point_x_index + (point_y_index * 40);
-
-		if (tile_data[tile_index] == 1) {
+		if (IsPointCollidingWithTileArray(point_to_check, tile_data)) {
 			collision_point = point_to_check;
 			return true;
 		}
