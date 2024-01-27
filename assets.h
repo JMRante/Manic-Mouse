@@ -2,6 +2,7 @@
 #ifndef MANICMOUSE_ASSETS_H_
 #define MANICMOUSE_ASSETS_H_
 
+#include <SDL_mixer.h>
 #include <GL/glew.h>
 #include <vector>
 
@@ -35,6 +36,8 @@ public:
 	Texture tile_sheets[5];
 	Mesh quad_mesh;
 	Mesh level_mesh;
+
+	Mix_Chunk* key_collect_sound;
 
 	std::vector<LevelState*> levels;
 

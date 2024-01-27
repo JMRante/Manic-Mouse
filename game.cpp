@@ -1,8 +1,9 @@
 #include "game.h"
 
-#include <cmath>
 #include <SDL.h>
+#include <SDL_mixer.h>
 #include <GL/glew.h>
+#include <cmath>
 
 #include "assets.h"
 #include "game_state.h"
@@ -16,6 +17,12 @@ bool Game::Start() {
 	}
 
 	if (!renderer.Load()) {
+		return false;
+	}
+
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+	{
+		SDL_Log("Failed to initialize audio mixer: %s", Mix_GetError());
 		return false;
 	}
 
@@ -179,16 +186,19 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 			if (red_key.active && IsPointCollidingWithCircle(mouse.transform.GetPosition(), red_key.transform.GetPosition(), 24.0f)) {
 				red_key.collected = true;
 				red_key.transform.SetPosition({ 32.0f, renderer.window_height - 32.0f });
+				Mix_PlayChannel(-1, assets.key_collect_sound, 0);
 			}
 
 			if (yellow_key.active && IsPointCollidingWithCircle(mouse.transform.GetPosition(), yellow_key.transform.GetPosition(), 24.0f)) {
 				yellow_key.collected = true;
 				yellow_key.transform.SetPosition({ 80.0f, renderer.window_height - 32.0f });
+				Mix_PlayChannel(-1, assets.key_collect_sound, 0);
 			}
 
 			if (blue_key.active && IsPointCollidingWithCircle(mouse.transform.GetPosition(), blue_key.transform.GetPosition(), 24.0f)) {
 				blue_key.collected = true;
 				blue_key.transform.SetPosition({ 128.0f, renderer.window_height - 32.0f });
+				Mix_PlayChannel(-1, assets.key_collect_sound, 0);
 			}
 
 			if (red_door.active && IsContinuousPointCollidingWithAABB(mouse_last_position, mouse.transform.GetPosition(), red_door.transform.GetPosition(), { 16.0f, 16.0f }, wall_collision_point)) {

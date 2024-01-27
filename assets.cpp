@@ -1,5 +1,6 @@
 #include "assets.h"
 
+#include <SDL_mixer.h>
 #include <GL/glew.h>
 
 #include "data_loader.h"
@@ -15,6 +16,8 @@ void Assets::Load() {
 	tile_sheets[2] = DataLoader::LoadPNG("Assets/mm_tileset3.png");
 	tile_sheets[3] = DataLoader::LoadPNG("Assets/mm_tileset4.png");
 	tile_sheets[4] = DataLoader::LoadPNG("Assets/mm_tileset5.png");
+
+	key_collect_sound = DataLoader::LoadSound("Assets/Audio/Sounds/mm_key_collect.wav");
 
 	DataLoader::LoadLevels("Assets/LevelData/level_data.lvls", levels);
 
@@ -43,6 +46,8 @@ void Assets::Unload() {
 	glDeleteVertexArrays(1, &level_mesh.vao_id);
 	glDeleteBuffers(1, &level_mesh.vbo_id);
 	glDeleteBuffers(1, &level_mesh.ebo_id);
+
+	Mix_FreeChunk(key_collect_sound);
 
 	for (int i = 0; i < levels.size(); i++) {
 		delete levels[i];

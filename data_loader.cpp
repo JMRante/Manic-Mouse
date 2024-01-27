@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 #include <GL/glew.h>
 #include <string>
 #include <fstream>
@@ -100,6 +101,26 @@ Texture DataLoader::LoadPNG(const std::string& png_file_path) {
 	SDL_FreeSurface(png_surface);
 
 	return new_sprite;
+}
+
+Mix_Music* DataLoader::LoadMusic(const std::string& music_file_path) {
+	Mix_Music* music = Mix_LoadMUS(music_file_path.c_str());
+
+	if (music == nullptr) {
+		SDL_Log("Failed to load music: %s %s", music_file_path, Mix_GetError());
+	}
+
+	return music;
+}
+
+Mix_Chunk* DataLoader::LoadSound(const std::string& sound_file_path) {
+	Mix_Chunk* sound = Mix_LoadWAV(sound_file_path.c_str());
+
+	if (sound == nullptr) {
+		SDL_Log("Failed to load sound: %s %s", sound_file_path, Mix_GetError());
+	}
+
+	return sound;
 }
 
 void DataLoader::LoadConfig(const std::string& config_file_path) {
