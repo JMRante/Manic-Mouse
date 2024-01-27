@@ -18,6 +18,11 @@ void Assets::Load() {
 	tile_sheets[4] = DataLoader::LoadPNG("Assets/mm_tileset5.png");
 
 	key_collect_sound = DataLoader::LoadSound("Assets/Audio/Sounds/mm_key_collect.wav");
+	open_door_sound = DataLoader::LoadSound("Assets/Audio/Sounds/mm_open_door.wav");
+	mouse_die_sound = DataLoader::LoadSound("Assets/Audio/Sounds/mm_mouse_die.wav");
+	eat_cheese_sound = DataLoader::LoadSound("Assets/Audio/Sounds/mm_eat_cheese.wav");
+
+	background_music = DataLoader::LoadMusic("Assets/Audio/Music/mm_music.mp3");
 
 	DataLoader::LoadLevels("Assets/LevelData/level_data.lvls", levels);
 
@@ -48,6 +53,11 @@ void Assets::Unload() {
 	glDeleteBuffers(1, &level_mesh.ebo_id);
 
 	Mix_FreeChunk(key_collect_sound);
+	Mix_FreeChunk(open_door_sound);
+	Mix_FreeChunk(mouse_die_sound);
+	Mix_FreeChunk(eat_cheese_sound);
+
+	Mix_FreeMusic(background_music);
 
 	for (int i = 0; i < levels.size(); i++) {
 		delete levels[i];

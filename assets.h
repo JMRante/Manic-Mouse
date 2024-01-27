@@ -38,6 +38,11 @@ public:
 	Mesh level_mesh;
 
 	Mix_Chunk* key_collect_sound;
+	Mix_Chunk* open_door_sound;
+	Mix_Chunk* mouse_die_sound;
+	Mix_Chunk* eat_cheese_sound;
+
+	Mix_Music* background_music;
 
 	std::vector<LevelState*> levels;
 
