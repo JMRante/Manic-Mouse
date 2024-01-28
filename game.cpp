@@ -195,6 +195,8 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 				transitions.radius_goal = 0.0f;
 				transitions.transition_time = 0.3f;
 
+				cheese.active = false;
+
 				PlaySound(assets.eat_cheese_sound);
 			}
 
@@ -334,6 +336,7 @@ void Game::LoadLevel(int level_id) {
 	game_state.level.mouse.is_dead = false;
 
 	Cheese& cheese = game_state.level.cheese;
+	cheese.active = true;
 	cheese.transform.SetPosition(level_to_load->cheese.transform.GetPosition());
 
 	Key& red_key = game_state.level.red_key;
