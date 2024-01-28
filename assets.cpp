@@ -21,6 +21,7 @@ void Assets::Load() {
 	open_door_sound = DataLoader::LoadSound("Assets/Audio/Sounds/mm_open_door.wav");
 	mouse_die_sound = DataLoader::LoadSound("Assets/Audio/Sounds/mm_mouse_die.wav");
 	eat_cheese_sound = DataLoader::LoadSound("Assets/Audio/Sounds/mm_eat_cheese.wav");
+	timer_ring_sound = DataLoader::LoadSound("Assets/Audio/Sounds/mm_timer_ring_sound.wav");
 
 	background_music = DataLoader::LoadMusic("Assets/Audio/Music/mm_music.mp3");
 
@@ -56,6 +57,7 @@ void Assets::Unload() {
 	Mix_FreeChunk(open_door_sound);
 	Mix_FreeChunk(mouse_die_sound);
 	Mix_FreeChunk(eat_cheese_sound);
+	Mix_FreeChunk(timer_ring_sound);
 
 	Mix_FreeMusic(background_music);
 

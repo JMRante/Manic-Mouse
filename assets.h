@@ -41,6 +41,7 @@ public:
 	Mix_Chunk* open_door_sound;
 	Mix_Chunk* mouse_die_sound;
 	Mix_Chunk* eat_cheese_sound;
+	Mix_Chunk* timer_ring_sound;
 
 	Mix_Music* background_music;
 

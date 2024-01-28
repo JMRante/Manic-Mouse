@@ -167,6 +167,15 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 				transitions.transition_time = 0.3f;
 			}
 		} else if (game_state.mode == Gameplay) {
+			game_state.level.time_limit -= delta_time_seconds;
+
+			if (game_state.level.time_limit <= 0.0f) {
+				game_state.level.time_limit = 0.0f;
+				mouse.is_dead = true;
+
+				Mix_PlayChannel(-1, assets.timer_ring_sound, 0);
+			}
+
 			if (IsPointCollidingWithCircle(mouse.transform.GetPosition(), cheese.transform.GetPosition(), 24.0f)) {
 				game_state.mode = GameplayWon;
 
@@ -184,6 +193,7 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 			if (IsContinuousPointCollidingWithTileArray(mouse_last_position, mouse.transform.GetPosition(), game_state.level.tilemap.tiles, wall_collision_point)) {
 				mouse.is_dead = true;
 				mouse.sprite_index = 3;
+				Mix_PlayChannel(-1, assets.mouse_die_sound, 0);
 				mouse.transform.SetPosition(wall_collision_point);
 			}
 
@@ -212,6 +222,7 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 				} else {
 					mouse.is_dead = true;
 					mouse.sprite_index = 3;
+					Mix_PlayChannel(-1, assets.mouse_die_sound, 0);
 					mouse.transform.SetPosition(wall_collision_point);
 				}
 			}
@@ -223,6 +234,7 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 				} else {
 					mouse.is_dead = true;
 					mouse.sprite_index = 3;
+					Mix_PlayChannel(-1, assets.mouse_die_sound, 0);
 					mouse.transform.SetPosition(wall_collision_point);
 				}
 			}
@@ -234,6 +246,7 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 				} else {
 					mouse.is_dead = true;
 					mouse.sprite_index = 3;
+					Mix_PlayChannel(-1, assets.mouse_die_sound, 0);
 					mouse.transform.SetPosition(wall_collision_point);
 				}
 			}
@@ -260,12 +273,9 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 				if (IsContinuousPointCollidingWithAABB(mouse_last_position, mouse.transform.GetPosition(), moving_block.transform.GetPosition(), { 16.0f, 16.0f }, wall_collision_point)) {
 					mouse.is_dead = true;
 					mouse.sprite_index = 3;
+					Mix_PlayChannel(-1, assets.mouse_die_sound, 0);
 					mouse.transform.SetPosition(wall_collision_point);
 				}
-			}
-
-			if (mouse.is_dead) {
-				Mix_PlayChannel(-1, assets.mouse_die_sound, 0);
 			}
 		}
 	} else {
@@ -415,4 +425,6 @@ void Game::LoadLevel(int level_id) {
 	transitions.radius_start = 0.0f;
 	transitions.radius_goal = 48.0f;
 	transitions.transition_time = 0.3f;
+
+	game_state.level.time_limit = level_to_load->time_limit;
 }

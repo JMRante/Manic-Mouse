@@ -107,6 +107,12 @@ struct Transitions {
 	float timer;
 };
 
+struct Settings {
+	bool enable_sound;
+	bool enable_music;
+	bool enable_fullscreen;
+};
+
 struct LevelState {
 	LevelState();
 
@@ -130,6 +136,7 @@ struct GameState {
 	int level_id;
 	LevelState level;
 	Transitions transitions;
+	Settings settings;
 };
 
 #endif
