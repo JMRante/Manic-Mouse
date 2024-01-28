@@ -87,6 +87,11 @@ void Game::UpdateInputState(InputState& input_state) {
 		case SDL_QUIT:
 			input_state.window_closed = true;
 			break;
+		case SDL_KEYDOWN:
+			if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
+				input_state.window_closed = true;
+			}
+			break;
 		case SDL_MOUSEMOTION:
 			Vector2D next_mouse_position = { (float)event.motion.x, (float)event.motion.y };
 			Vector2D mouse_direction = has_sampled_mouse_position ? next_mouse_position - input_state.mouse_position : Vector2D(1.0f, 0.0f);
