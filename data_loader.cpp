@@ -123,8 +123,35 @@ Mix_Chunk* DataLoader::LoadSound(const std::string& sound_file_path) {
 	return sound;
 }
 
-void DataLoader::LoadConfig(const std::string& config_file_path) {
+void DataLoader::LoadConfig(const std::string& config_file_path, Settings& settings) {
+	std::ifstream file_input_stream;
+	file_input_stream.open(config_file_path);
 
+	if (file_input_stream.is_open()) {
+		std::string line;
+		ConfigParserState parser_state = ParseMusicConfig;
+
+		while (std::getline(file_input_stream, line)) {
+			switch (parser_state) {
+			case ParseMusicConfig:
+				settings.enable_music = line[11] == 't';
+				parser_state = ParseSoundConfig;
+				break;
+			case ParseSoundConfig:
+				settings.enable_sound = line[11] == 't';
+				parser_state = ParseFullscreenConfig;
+				break;
+			case ParseFullscreenConfig:
+				settings.enable_fullscreen = line[11] == 't';
+				break;
+			}
+		}
+	} else {
+		SDL_Log("Failed to load config: %s", config_file_path);
+		settings.enable_music = true;
+		settings.enable_sound = true;
+		settings.enable_fullscreen = true;
+	}
 }
 
 void DataLoader::LoadLevels(const std::string& levels_file_path, std::vector<LevelState*>& levels) {

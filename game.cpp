@@ -6,6 +6,7 @@
 #include <cmath>
 
 #include "assets.h"
+#include "data_loader.h"
 #include "game_state.h"
 #include "input_state.h"
 #include "renderer.h"
@@ -16,7 +17,9 @@ bool Game::Start() {
 		return false;
 	}
 
-	if (!renderer.Load()) {
+	DataLoader::LoadConfig("config.cfg", game_state.settings);
+
+	if (!renderer.Load(game_state.settings.enable_fullscreen)) {
 		return false;
 	}
 
@@ -33,7 +36,9 @@ bool Game::Start() {
 
 	LoadLevel(game_state.level_id);
 
-	Mix_PlayMusic(assets.background_music, -1);
+	if (game_state.settings.enable_music) {
+		Mix_PlayMusic(assets.background_music, -1);
+	}
 
 	return true;
 }
@@ -75,17 +80,10 @@ void Game::UpdateInputState(InputState& input_state) {
 
 	input_state.mouse_speed = 0.0f;
 
-	input_state.mouse_left_pressed = false;
-
 	while (SDL_PollEvent(&event) != 0) {
 		switch (event.type) {
 		case SDL_QUIT:
 			input_state.window_closed = true;
-			break;
-		case SDL_MOUSEBUTTONDOWN:
-			if (event.button.button == SDL_BUTTON_LEFT) {
-				input_state.mouse_left_pressed = true;
-			}
 			break;
 		case SDL_MOUSEMOTION:
 			Vector2D next_mouse_position = { (float)event.motion.x, (float)event.motion.y };
@@ -173,7 +171,7 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 				game_state.level.time_limit = 0.0f;
 				mouse.is_dead = true;
 
-				Mix_PlayChannel(-1, assets.timer_ring_sound, 0);
+				PlaySound(assets.timer_ring_sound);
 			}
 
 			if (IsPointCollidingWithCircle(mouse.transform.GetPosition(), cheese.transform.GetPosition(), 24.0f)) {
@@ -186,43 +184,43 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 				transitions.radius_goal = 0.0f;
 				transitions.transition_time = 0.3f;
 
-				Mix_PlayChannel(-1, assets.eat_cheese_sound, 0);
+				PlaySound(assets.eat_cheese_sound);
 			}
 
 			Vector2D wall_collision_point;
 			if (IsContinuousPointCollidingWithTileArray(mouse_last_position, mouse.transform.GetPosition(), game_state.level.tilemap.tiles, wall_collision_point)) {
 				mouse.is_dead = true;
 				mouse.sprite_index = 3;
-				Mix_PlayChannel(-1, assets.mouse_die_sound, 0);
+				PlaySound(assets.mouse_die_sound);
 				mouse.transform.SetPosition(wall_collision_point);
 			}
 
 			if (red_key.active && IsPointCollidingWithCircle(mouse.transform.GetPosition(), red_key.transform.GetPosition(), 24.0f)) {
 				red_key.collected = true;
 				red_key.transform.SetPosition({ 32.0f, renderer.window_height - 32.0f });
-				Mix_PlayChannel(-1, assets.key_collect_sound, 0);
+				PlaySound(assets.key_collect_sound);
 			}
 
 			if (yellow_key.active && IsPointCollidingWithCircle(mouse.transform.GetPosition(), yellow_key.transform.GetPosition(), 24.0f)) {
 				yellow_key.collected = true;
 				yellow_key.transform.SetPosition({ 80.0f, renderer.window_height - 32.0f });
-				Mix_PlayChannel(-1, assets.key_collect_sound, 0);
+				PlaySound(assets.key_collect_sound);
 			}
 
 			if (blue_key.active && IsPointCollidingWithCircle(mouse.transform.GetPosition(), blue_key.transform.GetPosition(), 24.0f)) {
 				blue_key.collected = true;
 				blue_key.transform.SetPosition({ 128.0f, renderer.window_height - 32.0f });
-				Mix_PlayChannel(-1, assets.key_collect_sound, 0);
+				PlaySound(assets.key_collect_sound);
 			}
 
 			if (red_door.active && IsContinuousPointCollidingWithAABB(mouse_last_position, mouse.transform.GetPosition(), red_door.transform.GetPosition(), { 16.0f, 16.0f }, wall_collision_point)) {
 				if (red_key.collected) {
 					red_door.active = false;
-					Mix_PlayChannel(-1, assets.open_door_sound, 0);
+					PlaySound(assets.open_door_sound);
 				} else {
 					mouse.is_dead = true;
 					mouse.sprite_index = 3;
-					Mix_PlayChannel(-1, assets.mouse_die_sound, 0);
+					PlaySound(assets.mouse_die_sound);
 					mouse.transform.SetPosition(wall_collision_point);
 				}
 			}
@@ -230,11 +228,11 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 			if (yellow_door.active && IsContinuousPointCollidingWithAABB(mouse_last_position, mouse.transform.GetPosition(), yellow_door.transform.GetPosition(), { 16.0f, 16.0f }, wall_collision_point)) {
 				if (yellow_key.collected) {
 					yellow_door.active = false;
-					Mix_PlayChannel(-1, assets.open_door_sound, 0);
+					PlaySound(assets.open_door_sound);
 				} else {
 					mouse.is_dead = true;
 					mouse.sprite_index = 3;
-					Mix_PlayChannel(-1, assets.mouse_die_sound, 0);
+					PlaySound(assets.mouse_die_sound);
 					mouse.transform.SetPosition(wall_collision_point);
 				}
 			}
@@ -242,11 +240,11 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 			if (blue_door.active && IsContinuousPointCollidingWithAABB(mouse_last_position, mouse.transform.GetPosition(), blue_door.transform.GetPosition(), { 16.0f, 16.0f }, wall_collision_point)) {
 				if (blue_key.collected) {
 					blue_door.active = false;
-					Mix_PlayChannel(-1, assets.open_door_sound, 0);
+					PlaySound(assets.open_door_sound);
 				} else {
 					mouse.is_dead = true;
 					mouse.sprite_index = 3;
-					Mix_PlayChannel(-1, assets.mouse_die_sound, 0);
+					PlaySound(assets.mouse_die_sound);
 					mouse.transform.SetPosition(wall_collision_point);
 				}
 			}
@@ -273,7 +271,7 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 				if (IsContinuousPointCollidingWithAABB(mouse_last_position, mouse.transform.GetPosition(), moving_block.transform.GetPosition(), { 16.0f, 16.0f }, wall_collision_point)) {
 					mouse.is_dead = true;
 					mouse.sprite_index = 3;
-					Mix_PlayChannel(-1, assets.mouse_die_sound, 0);
+					PlaySound(assets.mouse_die_sound);
 					mouse.transform.SetPosition(wall_collision_point);
 				}
 			}
@@ -427,4 +425,10 @@ void Game::LoadLevel(int level_id) {
 	transitions.transition_time = 0.3f;
 
 	game_state.level.time_limit = level_to_load->time_limit;
+}
+
+void Game::PlaySound(Mix_Chunk* sound_asset) {
+	if (game_state.settings.enable_sound) {
+		Mix_PlayChannel(-1, sound_asset, 0);
+	}
 }

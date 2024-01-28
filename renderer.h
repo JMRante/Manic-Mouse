@@ -20,7 +20,7 @@ public:
 	Matrix4D tilemap_transform_matrix;
 	Matrix4D transition_transform_matrix;
 
-	bool Load();
+	bool Load(bool fullscreen);
 	void Unload();
 
 	void Render(GameState& game_state, Assets& assets);

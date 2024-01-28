@@ -8,6 +8,12 @@
 
 #include "renderer.h"
 
+enum ConfigParserState {
+	ParseMusicConfig,
+	ParseSoundConfig,
+	ParseFullscreenConfig
+};
+
 enum LevelParserState {
 	ParseTimeLimit,
 	ParseStart,
@@ -32,7 +38,7 @@ public:
 	static Texture LoadPNG(const std::string& png_file_path);
 	static Mix_Music* LoadMusic(const std::string& music_file_path);
 	static Mix_Chunk* LoadSound(const std::string& sound_file_path);
-	static void LoadConfig(const std::string& config_file_path);
+	static void LoadConfig(const std::string& config_file_path, Settings& settings);
 	static void LoadLevels(const std::string& levels_file_path, std::vector<LevelState*>& levels);
 private:
 	static void FlipSurface(SDL_Surface* surface);

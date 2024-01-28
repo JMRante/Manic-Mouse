@@ -8,7 +8,7 @@
 #include "assets.h"
 #include "game_state.h"
 
-bool Renderer::Load() {
+bool Renderer::Load(bool fullscreen) {
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -21,7 +21,9 @@ bool Renderer::Load() {
 	window_width = 1280;
 	window_height = 720;
 
-	window = SDL_CreateWindow("Manic Mouse", 100, 100, window_width, window_height, SDL_WINDOW_OPENGL);
+	int window_settings_flags = fullscreen ? SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN : SDL_WINDOW_OPENGL;
+
+	window = SDL_CreateWindow("Manic Mouse", 100, 100, window_width, window_height, window_settings_flags);
 	if (!window)
 	{
 		SDL_Log("Failed to create window: %s", SDL_GetError());
