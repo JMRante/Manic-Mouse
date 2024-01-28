@@ -34,6 +34,8 @@ bool Game::Start() {
 	game_state.mode = GameplayStart;
 	game_state.level_id = 0;
 
+	game_state.opening = true;
+
 	LoadLevel(game_state.level_id);
 
 	if (game_state.settings.enable_music) {
@@ -165,6 +167,10 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 				transitions.transition_time = 0.3f;
 			}
 		} else if (game_state.mode == Gameplay) {
+			if (game_state.opening) {
+				game_state.opening = false;
+			}
+
 			game_state.level.time_limit -= delta_time_seconds;
 
 			if (game_state.level.time_limit <= 0.0f) {

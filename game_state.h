@@ -5,7 +5,6 @@
 #include "game_math.h"
 
 enum MetaMode {
-	Main_Menu,
 	GameplayStart,
 	Gameplay,
 	GameplayRestart,
@@ -134,6 +133,7 @@ struct LevelState {
 struct GameState {
 	MetaMode mode;
 	int level_id;
+	bool opening;
 	LevelState level;
 	Transitions transitions;
 	Settings settings;
