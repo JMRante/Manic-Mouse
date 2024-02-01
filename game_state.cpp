@@ -134,7 +134,7 @@ LevelState::LevelState() {
 
     moving_block_count = 0;
 
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 50; i++) {
         MovingBlock& moving_block = moving_blocks[i];
         moving_block.active = false;
         moving_block.sprite.size = { 32.0f, 32.0f };

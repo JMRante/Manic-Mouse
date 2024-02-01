@@ -126,7 +126,7 @@ struct LevelState {
 	Door yellow_door;
 	Door blue_door;
 	int moving_block_count;
-	MovingBlock moving_blocks[20];
+	MovingBlock moving_blocks[50];
 	Tilemap tilemap;
 };
 

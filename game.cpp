@@ -368,7 +368,7 @@ void Game::LoadLevel(int level_id) {
 
 	game_state.level.moving_block_count = level_to_load->moving_block_count;
 
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < 50; i++) {
 		MovingBlock& moving_block = game_state.level.moving_blocks[i];
 		moving_block.active = i < game_state.level.moving_block_count;
 		moving_block.behavior = level_to_load->moving_blocks[i].behavior;
