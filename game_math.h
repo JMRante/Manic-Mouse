@@ -6,6 +6,9 @@ struct Vector2D {
 	float x;
 	float y;
 
+	Vector2D();
+	Vector2D(float x, float y);
+
 	friend Vector2D operator+(const Vector2D& vector_left, const Vector2D& vector_right);
 	friend Vector2D operator-(const Vector2D& vector_left, const Vector2D& vector_right);
 	friend Vector2D operator*(const Vector2D& vector_left, const Vector2D& vector_right);

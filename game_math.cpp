@@ -2,6 +2,16 @@
 
 #include <cmath>
 
+Vector2D::Vector2D() {
+	x = 0.0f;
+	y = 0.0f;
+}
+
+Vector2D::Vector2D(float x, float y) {
+	this->x = x;
+	this->y = y;
+}
+
 Vector2D operator+(const Vector2D& vector_left, const Vector2D& vector_right) {
 	return Vector2D(vector_left.x + vector_right.x, vector_left.y + vector_right.y);
 }
