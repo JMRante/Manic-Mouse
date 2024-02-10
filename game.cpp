@@ -34,8 +34,6 @@ bool Game::Start() {
 	game_state.mode = GameplayStart;
 	game_state.level_id = 0;
 
-	game_state.opening = true;
-
 	LoadLevel(game_state.level_id);
 
 	if (game_state.settings.enable_music) {
@@ -162,6 +160,8 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 		angle = copysign(angle, input_state.mouse_direction_smoothed.x);
 		mouse.transform.SetRotationInRadians(angle);
 
+		game_state.level.timer.UpdateSpritesAndTransforms(renderer.window_width);
+
 		if (game_state.mode == GameplayStart) {
 			if (IsPointCollidingWithCircle(mouse.transform.GetPosition(), game_state.level.start, 24.0f)) {
 				game_state.mode = Gameplay;
@@ -172,14 +172,14 @@ void Game::UpdateGameState(GameState& game_state, InputState& input_state, float
 				transitions.transition_time = 0.3f;
 			}
 		} else if (game_state.mode == Gameplay) {
-			if (game_state.opening) {
-				game_state.opening = false;
+			if (game_state.level.game_title.active) {
+				game_state.level.game_title.active = false;
 			}
 
-			game_state.level.time_limit -= delta_time_seconds;
+			game_state.level.timer.time_limit -= delta_time_seconds;
 
-			if (game_state.level.time_limit <= 0.0f) {
-				game_state.level.time_limit = 0.0f;
+			if (game_state.level.timer.time_limit <= 0.0f) {
+				game_state.level.timer.time_limit = 0.0f;
 				mouse.is_dead = true;
 
 				PlaySound(assets.timer_ring_sound);
@@ -438,7 +438,9 @@ void Game::LoadLevel(int level_id) {
 	transitions.radius_goal = 48.0f;
 	transitions.transition_time = 0.3f;
 
-	game_state.level.time_limit = level_to_load->time_limit;
+	game_state.level.timer.time_limit = level_to_load->timer.time_limit;
+
+	game_state.level.game_title.transform.SetPosition({ (float)renderer.window_width / 2.0f, ((float)renderer.window_height / 2.0f) - 16.0f });
 }
 
 void Game::PlaySound(Mix_Chunk* sound_asset) {

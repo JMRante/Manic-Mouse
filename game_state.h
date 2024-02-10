@@ -86,6 +86,20 @@ struct MovingBlock {
 	float speed;
 };
 
+struct Timer {
+	float time_limit;
+	Sprite sprites[5];
+	Transform transform[5];
+
+	void UpdateSpritesAndTransforms(int window_width);
+};
+
+struct GameTitle {
+	bool active;
+	Sprite sprite;
+	Transform transform;
+};
+
 struct Tilemap {
 	bool active;
 	int tilesheet_index;
@@ -115,7 +129,6 @@ struct Settings {
 struct LevelState {
 	LevelState();
 
-	float time_limit;
 	Vector2D start;
 	Mouse mouse;
 	Cheese cheese;
@@ -126,6 +139,8 @@ struct LevelState {
 	Door yellow_door;
 	Door blue_door;
 	int moving_block_count;
+	Timer timer;
+	GameTitle game_title;
 	MovingBlock moving_blocks[50];
 	Tilemap tilemap;
 };
@@ -133,7 +148,6 @@ struct LevelState {
 struct GameState {
 	MetaMode mode;
 	int level_id;
-	bool opening;
 	LevelState level;
 	Transitions transitions;
 	Settings settings;

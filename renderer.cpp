@@ -3,7 +3,6 @@
 #include <cmath>
 #include <SDL.h>
 #include <GL/glew.h>
-#include <string>
 
 #include "assets.h"
 #include "game_state.h"
@@ -144,91 +143,15 @@ void Renderer::Render(GameState& game_state, Assets& assets) {
 	}
 
 	// Timer
-	if (!game_state.opening) {
-		std::string timer_string = std::to_string(level.time_limit);
-
-		if (level.time_limit < 10.0f) {
-			timer_string.insert(0, 1, '0');
-		}
-
+	if (!game_state.level.game_title.active) {
 		for (int i = 0; i < 5; i++) {
-			char ch = timer_string[i];
-
-			Sprite char_sprite;
-			Transform char_sprite_transform = Transform();
-			float ch_x = ((float)window_width / 2.0f) - 64.0f;
-
-			if (i == 1) ch_x += 28.0f;
-			if (i == 2) ch_x += 52.0f;
-			if (i == 3) ch_x += 76.0f;
-			if (i == 4) ch_x += 104.0f;
-
-			char_sprite_transform.SetPosition({ ch_x, 32.0f });
-
-			switch (ch) {
-			case '0':
-				char_sprite.size = { 24.0f, 32.0f };
-				char_sprite.offset = { 96.0f, 32.0f };
-				break;
-			case '1':
-				char_sprite.size = { 24.0f, 32.0f };
-				char_sprite.offset = { 120.0f, 32.0f };
-				break;
-			case '2':
-				char_sprite.size = { 24.0f, 32.0f };
-				char_sprite.offset = { 96.0f, 64.0f };
-				break;
-			case '3':
-				char_sprite.size = { 24.0f, 32.0f };
-				char_sprite.offset = { 120.0f, 64.0f };
-				break;
-			case '4':
-				char_sprite.size = { 24.0f, 32.0f };
-				char_sprite.offset = { 96.0f, 96.0f };
-				break;
-			case '5':
-				char_sprite.size = { 24.0f, 32.0f };
-				char_sprite.offset = { 120.0f, 96.0f };
-				break;
-			case '6':
-				char_sprite.size = { 24.0f, 32.0f };
-				char_sprite.offset = { 144.0f, 96.0f };
-				break;
-			case '7':
-				char_sprite.size = { 24.0f, 32.0f };
-				char_sprite.offset = { 168.0f, 96.0f };
-				break;
-			case '8':
-				char_sprite.size = { 24.0f, 32.0f };
-				char_sprite.offset = { 192.0f, 96.0f };
-				break;
-			case '9':
-				char_sprite.size = { 24.0f, 32.0f };
-				char_sprite.offset = { 216.0f, 96.0f };
-				break;
-			case '.':
-				char_sprite.size = { 16.0f, 32.0f };
-				char_sprite.offset = { 240.0f, 96.0f };
-				break;
-			}
-
-			char_sprite_transform.SetScale(char_sprite.size);
-
-			RenderSprite(char_sprite, char_sprite_transform, assets);
+			RenderSprite(game_state.level.timer.sprites[i], game_state.level.timer.transform[i], assets);
 		}
 	}
 
 	// Title
-	if (game_state.opening) {
-		Sprite menu_sprite;
-		menu_sprite.size = { 256.0f, 128.0f };
-		menu_sprite.offset = { 0.0f, 128.0f };
-		
-		Transform menu_transform;
-		menu_transform.SetPosition({ (float)window_width / 2.0f, ((float)window_height / 2.0f) - 16.0f });
-		menu_transform.SetScale(menu_sprite.size);
-
-		RenderSprite(menu_sprite, menu_transform, assets);
+	if (game_state.level.game_title.active) {
+		RenderSprite(game_state.level.game_title.sprite, game_state.level.game_title.transform, assets);
 	}
 
 	SDL_GL_SwapWindow(window);

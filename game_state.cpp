@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <SDL.h>
+#include <string>
 
 Transform::Transform() {
 	position = Vector2D(0.0f, 0.0f);
@@ -142,6 +143,88 @@ LevelState::LevelState() {
         moving_block.transform = Transform();
         moving_block.transform.SetScale(moving_block.sprite.size);
         moving_block.behavior = Horizontal;
+    }
+
+    for (int i = 0; i < 5; i++) {
+        timer.transform[i] = Transform();
+    }
+
+    game_title.active = true;
+    game_title.sprite.size = { 256.0f, 128.0f };
+    game_title.sprite.offset = { 0.0f, 128.0f };
+    game_title.transform = Transform();
+    game_title.transform.SetScale(game_title.sprite.size);
+}
+
+void Timer::UpdateSpritesAndTransforms(int window_width) {
+    std::string timer_string = std::to_string(time_limit);
+
+    if (time_limit < 10.0f) {
+        timer_string.insert(0, 1, '0');
+    }
+
+    for (int i = 0; i < 5; i++) {
+        char ch = timer_string[i];
+
+        Sprite& char_sprite = sprites[i];
+        Transform& char_sprite_transform = transform[i];
+        float ch_x = ((float)window_width / 2.0f) - 64.0f;
+
+        if (i == 1) ch_x += 28.0f;
+        if (i == 2) ch_x += 52.0f;
+        if (i == 3) ch_x += 76.0f;
+        if (i == 4) ch_x += 104.0f;
+
+        char_sprite_transform.SetPosition({ ch_x, 32.0f });
+
+        switch (ch) {
+        case '0':
+            char_sprite.size = { 24.0f, 32.0f };
+            char_sprite.offset = { 96.0f, 32.0f };
+            break;
+        case '1':
+            char_sprite.size = { 24.0f, 32.0f };
+            char_sprite.offset = { 120.0f, 32.0f };
+            break;
+        case '2':
+            char_sprite.size = { 24.0f, 32.0f };
+            char_sprite.offset = { 96.0f, 64.0f };
+            break;
+        case '3':
+            char_sprite.size = { 24.0f, 32.0f };
+            char_sprite.offset = { 120.0f, 64.0f };
+            break;
+        case '4':
+            char_sprite.size = { 24.0f, 32.0f };
+            char_sprite.offset = { 96.0f, 96.0f };
+            break;
+        case '5':
+            char_sprite.size = { 24.0f, 32.0f };
+            char_sprite.offset = { 120.0f, 96.0f };
+            break;
+        case '6':
+            char_sprite.size = { 24.0f, 32.0f };
+            char_sprite.offset = { 144.0f, 96.0f };
+            break;
+        case '7':
+            char_sprite.size = { 24.0f, 32.0f };
+            char_sprite.offset = { 168.0f, 96.0f };
+            break;
+        case '8':
+            char_sprite.size = { 24.0f, 32.0f };
+            char_sprite.offset = { 192.0f, 96.0f };
+            break;
+        case '9':
+            char_sprite.size = { 24.0f, 32.0f };
+            char_sprite.offset = { 216.0f, 96.0f };
+            break;
+        case '.':
+            char_sprite.size = { 16.0f, 32.0f };
+            char_sprite.offset = { 240.0f, 96.0f };
+            break;
+        }
+
+        char_sprite_transform.SetScale(char_sprite.size);
     }
 }
 

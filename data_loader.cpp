@@ -168,7 +168,7 @@ void DataLoader::LoadLevels(const std::string& levels_file_path, std::vector<Lev
 		while (std::getline(file_input_stream, line)) {
 			switch (parser_state) {
 			case ParseTimeLimit:
-				level->time_limit = std::stof(line);
+				level->timer.time_limit = std::stof(line);
 				parser_state = ParseStart;
 				break;
 			case ParseStart:
