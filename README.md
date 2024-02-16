@@ -26,9 +26,13 @@ Manic Mouse utilizes the C++ standard library, SDL2, and GLEW.
 ### Audio Source Credits
 
 669338__geoff-bremner-audio__keys-grab-hard-2 by Geoff-Bremner-Audio
+
 537828__postproddog__open-door-knob-step-in-close-door by PostProdDog
+
 472399__joseagudelo__16_raton_chillando by JoseAgudelo
+
 411597__omgbong__eating-an-apple-01 by omgbong
+
 78562__joedeshon__alarm_clock_ringing_01 by joedeshon
 
 Sneaky Feet by geoffharvey
